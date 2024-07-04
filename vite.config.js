@@ -12,9 +12,9 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/Package.js'),
-      name: 'Package',
-      fileName: (format) => `Package.${format}.js`
+      entry: path.resolve(__dirname, 'lib/VideoEmbed.js'),
+      name: 'VideoEmbed',
+      fileName: (format) => `VideoEmbed.${format}.js`
     },
   }
 });

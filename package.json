@@ -1,12 +1,12 @@
 {
-  "name": "@numiko/package",
-  "description": "Package boilerplate",
+  "name": "@numiko/video-embed",
+  "description": "Initialise and control video embeds currently supporting YouTube and Vimeo.",
   "version": "1.0.0",
   "type": "module",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org:numiko/package-boilerplate.git"
+    "url": "git+ssh://git@bitbucket.org:numiko/video-embed.git"
   },
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,7 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/"
   },
-  "main": "./dist/Package.umd.js",
+  "main": "./dist/videoEmbed.umd.js",
   "files": [
     "dist",
     "package.json",
@@ -24,8 +24,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/Package.es.js",
-      "require": "./dist/Package.umd.js"
+      "import": "./dist/videoEmbed.es.js",
+      "require": "./dist/videoEmbed.umd.js"
     }
   },
   "devDependencies": {
