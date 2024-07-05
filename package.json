@@ -16,7 +16,7 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/"
   },
-  "main": "./dist/videoEmbed.umd.js",
+  "main": "./dist/VideoEmbed.umd.js",
   "files": [
     "dist",
     "package.json",
@@ -24,8 +24,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/videoEmbed.es.js",
-      "require": "./dist/videoEmbed.umd.js"
+      "import": "./dist/VideoEmbed.es.js",
+      "require": "./dist/VideoEmbed.umd.js"
     }
   },
   "devDependencies": {
