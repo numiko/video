@@ -1,7 +1,7 @@
-var s = Object.defineProperty;
-var o = (t, e, i) => e in t ? s(t, e, { enumerable: !0, configurable: !0, writable: !0, value: i }) : t[e] = i;
-var a = (t, e, i) => o(t, typeof e != "symbol" ? e + "" : e, i);
-class l {
+var r = Object.defineProperty;
+var l = (a, e, t) => e in a ? r(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
+var s = (a, e, t) => l(a, typeof e != "symbol" ? e + "" : e, t);
+const i = class i {
   /**
    *
    * @param {Object} options
@@ -19,7 +19,7 @@ class l {
      * Stores an instance of the video player, once initialised.
      * @type {YT.Player | Vimeo.Player | null}
      */
-    a(this, "player", null);
+    s(this, "player", null);
     this.playerElement = e.playerElement, this.videoId = e.videoId, this.provider = e.provider, this.facade = e.facade || null, this.playPausebutton = e.playPausebutton || null, this.onVideoPlay = e.onVideoPlay || null, this.onVideoPause = e.onVideoPause || null, this.onBeforeVideoPlay = e.onBeforeVideoPlay || null, this.facade ? this.facade.addEventListener("click", () => {
       this.init();
     }) : this.init();
@@ -32,27 +32,35 @@ class l {
   }
   /**
    * Loads the YouTube API if it hasn't already been loaded.
-   * @returns {Promise}
+   * @returns {Promise<void>}
    */
   async loadYouTubeApi() {
-    return window.YT && window.YT.Player ? Promise.resolve() : new Promise((e) => {
-      const i = document.createElement("script");
-      i.src = "https://www.youtube.com/iframe_api", document.head.appendChild(i), window.onYouTubeIframeAPIReady = () => {
+    return i.youtubeApiPromise || (i.youtubeApiPromise = new Promise((e) => {
+      if (window.YT && window.YT.Player) {
+        e();
+        return;
+      }
+      const t = document.createElement("script");
+      t.src = "https://www.youtube.com/iframe_api", document.head.appendChild(t), window.onYouTubeIframeAPIReady = () => {
         e();
       };
-    });
+    })), i.youtubeApiPromise;
   }
   /**
    * Loads the Vimeo API if it hasn't already been loaded.
-   * @returns {Promise}
+   * @returns {Promise<void>}
    */
   async loadVimeoApi() {
-    return window.Vimeo ? Promise.resolve() : new Promise((e) => {
-      const i = document.createElement("script");
-      i.src = "https://player.vimeo.com/api/player.js", i.onload = () => {
+    return i.vimeoApiPromise || (i.vimeoApiPromise = new Promise((e) => {
+      if (window.Vimeo) {
         e();
-      }, document.head.appendChild(i);
-    });
+        return;
+      }
+      const t = document.createElement("script");
+      t.src = "https://player.vimeo.com/api/player.js", t.onload = () => {
+        e();
+      }, document.head.appendChild(t);
+    })), i.vimeoApiPromise;
   }
   /**
    * Hides the facade element.
@@ -84,7 +92,7 @@ class l {
       ...this.videoId && { id: this.videoId },
       transparent: !1
     }), this.player.on("loaded", () => {
-      this.player.play().then(() => {
+      this.facade && this.player.play().then(() => {
         this.hideFacade();
       }).catch((e) => {
         console.error("Error playing the video:", e);
@@ -108,11 +116,11 @@ class l {
       playerVars: {
         playsinline: 1,
         rel: 0,
-        autoplay: 1
+        autoplay: 0
       },
       events: {
         onReady: () => {
-          this.hideFacade();
+          this.facade && (this.hideFacade(), this.player.playVideo());
         },
         onStateChange: (e) => {
           e.data === window.YT.PlayerState.PLAYING && typeof this.onVideoPlay == "function" && this.onVideoPlay(this.player), e.data === window.YT.PlayerState.PAUSED && typeof this.onVideoPause == "function" && this.onVideoPause(this.player);
@@ -133,7 +141,17 @@ class l {
       });
     });
   }
-}
+};
+/**
+ * Static property to track YouTube API loading Promise.
+ * @type {Promise<void> | null}
+ */
+s(i, "youtubeApiPromise", null), /**
+ * Static property to track Vimeo API loading Promise.
+ * @type {Promise<void> | null}
+ */
+s(i, "vimeoApiPromise", null);
+let o = i;
 export {
-  l as VideoEmbed
+  o as VideoEmbed
 };

@@ -4,16 +4,16 @@ import { VideoEmbed } from '../lib/VideoEmbed';
 /**
  * Video Embed with Facades
  */
-const videoEmbedWithFacades = document.querySelectorAll('.c-video-embed-facade');
+const videoEmbeds = document.querySelectorAll('[data-js-video-embed]');
 
-for (const videoEmbedWithFacade of videoEmbedWithFacades) {
+for (const videoEmbed of videoEmbeds) {
   new VideoEmbed({
-    playerElement: videoEmbedWithFacade.querySelector('[data-js-video-embed-player]'),
-    videoId: videoEmbedWithFacade.getAttribute('data-js-video-embed-id'),
-    provider: videoEmbedWithFacade.getAttribute('data-js-video-embed-provider'),
-    facade: videoEmbedWithFacade.querySelector('[data-js-video-embed-facade]'),
+    playerElement: videoEmbed.querySelector('[data-js-video-embed-player]'),
+    videoId: videoEmbed.getAttribute('data-js-video-embed-id'),
+    provider: videoEmbed.getAttribute('data-js-video-embed-provider'),
+    facade: videoEmbed.querySelector('[data-js-video-embed-facade]'),
     onBeforeVideoPlay: () => {
-      videoEmbedWithFacade.querySelector('.c-icon use').setAttribute('href', '#animated-loader');
+      videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
     onVideoPlay: () => {},
     onVideoPause: () => {},
@@ -23,7 +23,7 @@ for (const videoEmbedWithFacade of videoEmbedWithFacades) {
 /**
  * Video Embed Ambient for heros
  */
-const videoEmbedAmbients = document.querySelectorAll('.c-video-embed-ambient');
+const videoEmbedAmbients = document.querySelectorAll('[data-js-video-embed-ambient]');
 
 for (const videoEmbedAmbient of videoEmbedAmbients) {
   const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
@@ -33,10 +33,10 @@ for (const videoEmbedAmbient of videoEmbedAmbients) {
     playPausebutton: playPausebutton,
     onBeforeVideoPlay: () => {},
     onVideoPlay: () => {
-      playPausebutton.querySelector('.c-icon use').setAttribute('href', '#material-pause');
+      playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
     },
     onVideoPause: () => {
-      playPausebutton.querySelector('.c-icon use').setAttribute('href', '#material-play');
+      playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
     },
   });
 }

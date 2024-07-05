@@ -67,10 +67,11 @@
 
   <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
+    <!-- Facade Embed - Vimeo  -->
     <div>
-      <!-- Facade Embed - Vimeo  -->
       <h2 class="text-3xl mt-8 mb-4">Embed with Facade - Vimeo</h2>
-      <div class="c-video-embed-facade" data-js-video-embed-id="958291103" data-js-video-embed-provider="vimeo">
+      <div class="c-video-embed-facade" data-js-video-embed data-js-video-embed-id="958291103"
+        data-js-video-embed-provider="vimeo">
 
         <div data-js-video-embed-player></div>
 
@@ -87,11 +88,10 @@
       </div>
     </div>
 
-
+    <!-- Facade Embed - Youtube  -->
     <div>
-      <!-- Facade Embed - Youtube  -->
       <h2 class="text-3xl mt-8 mb-4">Embed with Facade - Youtube</h2>
-      <div class="c-video-embed-facade" data-js-video-embed-id="G1hKzCkywM8" data-js-video-embed-provider="youtube">
+      <div class="c-video-embed-facade" data-js-video-embed data-js-video-embed-id="G1hKzCkywM8" data-js-video-embed-provider="youtube">
 
         <div data-js-video-embed-player></div>
 
@@ -109,13 +109,37 @@
 
     </div>
 
+    <!--  Embed - Vimeo  -->
+    <div>
+      <h2 class="text-3xl mt-8 mb-4">Embed - Vimeo</h2>
+      <div class="c-video-embed-facade" data-js-video-embed data-js-video-embed-id="958291103"
+        data-js-video-embed-provider="vimeo">
+
+        <div data-js-video-embed-player></div>
+
+      </div>
+    </div>
+
+    <!--  Embed - Youtube  -->
+    <div>
+      <h2 class="text-3xl mt-8 mb-4">Embed - Youtube</h2>
+      <div class="c-video-embed-facade" data-js-video-embed data-js-video-embed-id="G1hKzCkywM8"
+        data-js-video-embed-provider="youtube">
+
+        <div data-js-video-embed-player></div>
+
+
+      </div>
+
+    </div>
+
+    <!-- Embed Hero - Vimeo -->
     <div>
 
-      <!-- Embed Hero - Vimeo -->
       <h2 class="text-3xl mt-8 mb-4">Embed Ambient (Hero) - Vimeo</h2>
 
       <div class="w-full aspect-[4/1] relative">
-        <div class="c-video-embed-ambient" data-js-video-embed-provider="vimeo">
+        <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="vimeo">
 
           <iframe
             src="https://player.vimeo.com/video/958291103?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&background=1"
@@ -133,12 +157,12 @@
       </div>
     </div>
 
+    <!-- Embed Hero - Vimeo -->
     <div>
-      <!-- Embed Hero - Vimeo -->
       <h2 class="text-3xl mt-8 mb-4">Embed Ambient (Hero) - Youtube</h2>
 
       <div class="w-full aspect-[4/1] relative">
-        <div class="c-video-embed-ambient" data-js-video-embed-provider="youtube">
+        <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="youtube">
 
           <iframe
             src="https://www.youtube.com/embed/Jox6R5-rIH0?enablejsapi=1&controls=0&playlist=Jox6R5-rIH0&autoplay=1&mute=1&fs=0&disablekb=1&loop=1&playsinline=1&rel=0"
@@ -158,17 +182,6 @@
     </div>
 
   </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
   <script type="module" src="./src/main.js"></script>
