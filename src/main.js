@@ -7,7 +7,6 @@ import { VideoEmbed } from '../lib/VideoEmbed';
 const videoEmbeds = document.querySelectorAll('[data-js-video-embed]');
 
 for (const videoEmbed of videoEmbeds) {
-  console.log(videoEmbed.querySelector('[data-js-video-embed-player]'));
   new VideoEmbed({
     playerElement: videoEmbed.querySelector('[data-js-video-embed-player]'),
     videoId: videoEmbed.getAttribute('data-js-video-embed-id'),
@@ -16,8 +15,12 @@ for (const videoEmbed of videoEmbeds) {
     onBeforeVideoPlay: () => {
       videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
-    onVideoPlay: () => {},
-    onVideoPause: () => {},
+    onVideoPlay: () => {
+      console.log('Video is playing');
+    },
+    onVideoPause: () => {
+      console.log('Video is paused');
+    },
   });
 }
 

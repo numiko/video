@@ -1,6 +1,6 @@
-var r = Object.defineProperty;
-var l = (a, e, t) => e in a ? r(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
-var s = (a, e, t) => l(a, typeof e != "symbol" ? e + "" : e, t);
+var s = Object.defineProperty;
+var l = (a, e, t) => e in a ? s(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
+var r = (a, e, t) => l(a, typeof e != "symbol" ? e + "" : e, t);
 const i = class i {
   /**
    *
@@ -19,7 +19,7 @@ const i = class i {
      * Stores an instance of the video player, once initialised.
      * @type {YT.Player | Vimeo.Player | null}
      */
-    s(this, "player", null);
+    r(this, "player", null);
     this.playerElement = e.playerElement, this.videoId = e.videoId, this.provider = e.provider, this.facade = e.facade || null, this.playPausebutton = e.playPausebutton || null, this.onVideoPlay = e.onVideoPlay || null, this.onVideoPause = e.onVideoPause || null, this.onBeforeVideoPlay = e.onBeforeVideoPlay || null, this.facade ? this.facade.addEventListener("click", () => {
       this.init();
     }) : this.init();
@@ -28,7 +28,13 @@ const i = class i {
    * Initialises the video player.
    */
   async init() {
-    this.onBeforeVideoPlay && this.onBeforeVideoPlay(), this.provider === "youtube" ? (await this.loadYouTubeApi(), this.createYouTubePlayer()) : this.provider === "vimeo" ? (await this.loadVimeoApi(), this.createVimeoPlayer()) : this.provider === "html5" && this.createHTML5Player(), this.playPausebutton && this.addEventListeners();
+    this.onBeforeVideoPlay && this.onBeforeVideoPlay();
+    try {
+      this.provider === "youtube" ? (await this.loadYouTubeApi(), this.createYouTubePlayer()) : this.provider === "vimeo" ? (await this.loadVimeoApi(), this.createVimeoPlayer()) : this.provider === "html5" && this.createHTML5Player();
+    } catch (e) {
+      console.error("Error initializing the video player:", e);
+    }
+    this.playPausebutton && this.addEventListeners();
   }
   /**
    * Loads the YouTube API if it hasn't already been loaded.
@@ -101,6 +107,8 @@ const i = class i {
       typeof this.onVideoPlay == "function" && this.onVideoPlay(this.player);
     }), this.player.on("pause", () => {
       typeof this.onVideoPause == "function" && this.onVideoPause(this.player);
+    }), this.player.on("error", (e) => {
+      console.error("Vimeo player error:", e);
     });
   }
   /**
@@ -124,6 +132,9 @@ const i = class i {
         },
         onStateChange: (e) => {
           e.data === window.YT.PlayerState.PLAYING && typeof this.onVideoPlay == "function" && this.onVideoPlay(this.player), e.data === window.YT.PlayerState.PAUSED && typeof this.onVideoPause == "function" && this.onVideoPause(this.player);
+        },
+        onError: (e) => {
+          console.error("YouTube player error:", e);
         }
       }
     });
@@ -137,6 +148,8 @@ const i = class i {
       typeof this.onVideoPlay == "function" && this.onVideoPlay(this.player);
     }), this.player.addEventListener("pause", () => {
       typeof this.onVideoPause == "function" && this.onVideoPause(this.player);
+    }), this.player.addEventListener("error", (e) => {
+      console.error("HTML5 player error:", e);
     });
   }
   /**
@@ -157,11 +170,11 @@ const i = class i {
  * Static property to track YouTube API loading Promise.
  * @type {Promise<void> | null}
  */
-s(i, "youtubeApiPromise", null), /**
+r(i, "youtubeApiPromise", null), /**
  * Static property to track Vimeo API loading Promise.
  * @type {Promise<void> | null}
  */
-s(i, "vimeoApiPromise", null);
+r(i, "vimeoApiPromise", null);
 let o = i;
 export {
   o as VideoEmbed
