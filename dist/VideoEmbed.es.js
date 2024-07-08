@@ -1,5 +1,5 @@
-var s = Object.defineProperty;
-var l = (a, e, t) => e in a ? s(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
+var o = Object.defineProperty;
+var l = (a, e, t) => e in a ? o(a, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : a[e] = t;
 var r = (a, e, t) => l(a, typeof e != "symbol" ? e + "" : e, t);
 const i = class i {
   /**
@@ -100,7 +100,8 @@ const i = class i {
   createVimeoPlayer() {
     this.player = new window.Vimeo.Player(this.playerElement, {
       ...this.videoId && { id: this.videoId },
-      transparent: !1
+      transparent: !1,
+      autopause: !1
     }), this.player.on("loaded", () => {
       this.facade && this.player.play().then(() => {
         this.hideFacade();
@@ -185,7 +186,7 @@ r(i, "youtubeApiPromise", null), /**
  * @type {Promise<void> | null}
  */
 r(i, "vimeoApiPromise", null);
-let o = i;
+let s = i;
 export {
-  o as VideoEmbed
+  s as VideoEmbed
 };

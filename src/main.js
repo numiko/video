@@ -15,8 +15,8 @@ for (const videoEmbed of videoEmbeds) {
     onBeforeVideoPlay: () => {
       videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
-    onVideoPlay: () => {
-      console.log('Video is playing');
+    onVideoPlay: (player) => {
+      console.log('Video is playing', player);
     },
     onVideoPause: () => {
       console.log('Video is paused');
