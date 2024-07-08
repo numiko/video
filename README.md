@@ -1,45 +1,147 @@
-# Package Boilerplate
+# VideoEmbed
 
-This package is to be used as a starting point when creating a new front-end module.
+`VideoEmbed` is a JavaScript class for embedding and controlling video players from YouTube, Vimeo, and HTML5 video sources. It provides a consistent interface for initializing video players, handling play/pause functionality, and managing event callbacks.
 
-## What does it include?
+## Installation
+a) Install a specific tag
+```shell
+npm install ssh://git@bitbucket.org:numiko/video-embed.git#<TAG_NAME>
+```
+b) Install using semver
+```shell
+npm install ssh://git@bitbucket.org:numiko/video-embed.git##semver:^1.0.0
+```
 
-- Vite
-- `vitest` and `happy-dom` for testing
-- CircleCI configuration
-- ES Lint
+## Usage
 
-## When creating a new package
+```JS
+import { VideoEmbed } from './path/to/VideoEmbed';
+```
 
-### The index.html file
+### Video with facade
+```JS
+const videoEmbed = document.querySelector('[data-js-video-embed]');
+new VideoEmbed({
+    playerElement: videoEmbed.querySelector('[data-js-video-embed-player]'),
+    videoId: videoEmbed.getAttribute('data-js-video-embed-id'),
+    provider: videoEmbed.getAttribute('data-js-video-embed-provider'),
+    facade: videoEmbed.querySelector('[data-js-video-embed-facade]'),
+    onBeforeVideoPlay: () => {
+      videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+    }
+  });
+```
+Example HTML structure - Embed with Facade
+```HTML
+ <div
+  class="c-video-embed-facade"
+  data-js-video-embed
+  data-js-video-embed-id="958291103"
+  data-js-video-embed-provider="vimeo">
 
-- Update the `title` element inside `index.html` to match the package name
+  <div data-js-video-embed-player></div>
 
-### The package.json file
+  <button type="button" data-js-video-embed-facade class="h-full w-full flex items-center justify-center group"
+    aria-label="Play video - [Video Name]">
+    <img src="https://picsum.photos/1000/563" alt="" loading="lazy"
+      class="absolute top-0 left-0 w-full h-full object-cover" />
+    <span class="c-button | relative z-10">
+      <svg class="c-icon" focusable="false" aria-hidden="true">
+        <use href="#material-play"></use>
+      </svg>
+    </span>
+  </button>
+</div>
+```
 
-- Update the `name`
-- Update the `description`
-- Update the `version`, if necessary
-- Update the `repository.url` field
-- Update the `main` field
-- Update the `exports` field
+### Video for hero
+```JS
+const videoEmbedAmbient = document.querySelector('[data-js-video-embed-ambient]');
+const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
+new VideoEmbed({
+  playerElement: videoEmbedAmbient.querySelector('[data-js-video-embed-player]'),
+  provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
+  playPausebutton: playPausebutton,
+  onBeforeVideoPlay: () => {},
+  onVideoPlay: () => {
+    playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
+  },
+  onVideoPause: () => {
+    playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
+  },
+});
+```
+```HTML
+<div class="w-full aspect-[4/1] relative">
+  <div
+    class="c-video-embed-ambient"
+    data-js-video-embed-ambient
+    data-js-video-embed-provider="vimeo">
 
-### The Vite config file
+    <iframe
+      data-js-video-embed-player
+      src="https://player.vimeo.com/video/958291103?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&background=1"
+      frameborder="0"
+      title="[Video title]">
+    </iframe>
 
-- Update the `build.lib` field to match that of the new package name
+    <button
+      data-js-video-embed-buttontype="button"
+      aria-pressed="false"
+      aria-label="Play/Pause Video - Video title"
+      class="absolute bottom-0 right-0 mb-5 mr-5 z-10">
+        <svg class="c-icon" focusable="false" aria-hidden="true">
+          <use href="#material-pause"></use>
+        </svg>
+    </button>
 
-### Imports
+  </div>
+</div>
+```
+### CSS
+The CSS for the videos is already part of sitekit and included in the component folders.  But below is a copy of it should this been used outside of a drupal SDC project.
+```CSS
+@layer components {
 
-- Update the package filename inside of the `lib` directory
-- Update the `import` statements to match that of the new package name inside the `src/main.js` file
+  .c-video-embed-facade {
+    @apply relative aspect-video w-full;
 
-## Distributing a new build
+    iframe {
+      @apply absolute top-0 left-0 w-full h-full;
+    }
+  }
 
-- Update the version number if necessary
-- Run an `npm run build` to compile the built assets
-- Commit the built assets
+  .c-video-embed-ambient {
+    @apply relative overflow-hidden;
+    @apply absolute top-0 left-0 w-full h-full;
+    container-type: size;
 
-## Circle CI
+    iframe {
+      @apply relative top-1/2 left-1/2 w-full h-full -translate-y-1/2 -translate-x-1/2 pointer-events-none;
 
-Circle CI configuration has been added to this project, however additional work needs to be done inside Circle to set the project up.
-See [Circle CI documentation](https://numiko.atlassian.net/wiki/spaces/FRONTEND/pages/651460615/CircleCI+Configuration+for+FE+tests).
+      /* Make iframe behave like object-fit:cover */
+      @container (min-aspect-ratio: 16/9) {
+        height: 56.25vw;
+      }
+
+      @container (max-aspect-ratio: 16/9) {
+        width: 177.78vh;
+      }
+
+    }
+  }
+}
+```
+
+## Constructor options
+
+|Property|Type|Description|
+|-------|------|--------|
+|`playerElement`|HTMLElement|The HTML element that the video is injected into.|
+|`videoId`|	string	|The video's ID. Required for YouTube and Vimeo providers.|
+|`provider`	| 'youtube', 'vimeo', 'html5'|	The video's provider.|
+|`facade`|HTMLElement (optional)|	Optional HTML element displayed as a facade before the video is initiated.|
+|`playPausebutton`|	HTMLElement (optional)|	Optional HTML element for play/pause functionality.|
+|`onVideoPlay`|	Function (optional)|	Optional callback function for when the video plays.|
+|`onVideoPause`|	Function (optional)|	Optional callback function for when the video pauses.|
+|`onBeforeVideoPlay`|	Function (optional)|	Optional callback function for before the video plays.

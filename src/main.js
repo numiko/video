@@ -33,7 +33,7 @@ for (const videoEmbedAmbient of videoEmbedAmbients) {
 
   const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
   new VideoEmbed({
-    playerElement: videoEmbedAmbient.querySelector('iframe, video'),
+    playerElement: videoEmbedAmbient.querySelector('[data-js-video-embed-player]'),
     provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
     playPausebutton: playPausebutton,
     onBeforeVideoPlay: () => {},

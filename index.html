@@ -181,6 +181,7 @@
         <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="vimeo">
 
           <iframe
+            data-js-video-embed-player
             src="https://player.vimeo.com/video/958291103?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&background=1"
             frameborder="0" title="Video title">
           </iframe>
@@ -204,6 +205,7 @@
         <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="youtube">
 
           <iframe
+            data-js-video-embed-player
             src="https://www.youtube.com/embed/Jox6R5-rIH0?enablejsapi=1&controls=0&playlist=Jox6R5-rIH0&autoplay=1&mute=1&fs=0&disablekb=1&loop=1&playsinline=1&rel=0"
             frameborder="0" title="Video title">
           </iframe>
@@ -227,7 +229,14 @@
           <div class="w-full aspect-[4/1] relative">
             <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="html5">
 
-              <video class="" preload="auto" playsinline="" loop="" autoplay="" muted="" disablepictureinpicture="">
+              <video
+                data-js-video-embed-player
+                preload="auto"
+                playsinline
+                loop
+                autoplay
+                muted
+                disablepictureinpicture="">
                 <source src="https://player.vimeo.com/progressive_redirect/playback/958291103/rendition/1080p/file.mp4?loc=external&amp;log_user=0&amp;signature=43e4026b443ce02e10be32b9c1b973544678e52425064d0454f7cac23a10db1f" type="video/mp4">
               </video>
 
