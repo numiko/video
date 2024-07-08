@@ -7,6 +7,7 @@ import { VideoEmbed } from '../lib/VideoEmbed';
 const videoEmbeds = document.querySelectorAll('[data-js-video-embed]');
 
 for (const videoEmbed of videoEmbeds) {
+  console.log(videoEmbed.querySelector('[data-js-video-embed-player]'));
   new VideoEmbed({
     playerElement: videoEmbed.querySelector('[data-js-video-embed-player]'),
     videoId: videoEmbed.getAttribute('data-js-video-embed-id'),
@@ -26,9 +27,10 @@ for (const videoEmbed of videoEmbeds) {
 const videoEmbedAmbients = document.querySelectorAll('[data-js-video-embed-ambient]');
 
 for (const videoEmbedAmbient of videoEmbedAmbients) {
+
   const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
   new VideoEmbed({
-    playerElement: videoEmbedAmbient.querySelector('iframe'),
+    playerElement: videoEmbedAmbient.querySelector('iframe, video'),
     provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
     playPausebutton: playPausebutton,
     onBeforeVideoPlay: () => {},

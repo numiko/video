@@ -28,7 +28,7 @@ const i = class i {
    * Initialises the video player.
    */
   async init() {
-    this.onBeforeVideoPlay && this.onBeforeVideoPlay(), this.provider === "youtube" ? (await this.loadYouTubeApi(), this.createYouTubePlayer()) : this.provider === "vimeo" && (await this.loadVimeoApi(), this.createVimeoPlayer()), this.playPausebutton && this.addEventListeners();
+    this.onBeforeVideoPlay && this.onBeforeVideoPlay(), this.provider === "youtube" ? (await this.loadYouTubeApi(), this.createYouTubePlayer()) : this.provider === "vimeo" ? (await this.loadVimeoApi(), this.createVimeoPlayer()) : this.provider === "html5" && this.createHTML5Player(), this.playPausebutton && this.addEventListeners();
   }
   /**
    * Loads the YouTube API if it hasn't already been loaded.
@@ -128,6 +128,17 @@ const i = class i {
       }
     });
   }
+  createHTML5Player() {
+    this.player = this.playerElement, this.facade && this.player.play().then(() => {
+      this.hideFacade();
+    }).catch((e) => {
+      console.error("Error playing the video:", e);
+    }), this.player.addEventListener("play", () => {
+      typeof this.onVideoPlay == "function" && this.onVideoPlay(this.player);
+    }), this.player.addEventListener("pause", () => {
+      typeof this.onVideoPause == "function" && this.onVideoPause(this.player);
+    });
+  }
   /**
    * Adds event listeners to the instance.
    */
@@ -136,9 +147,9 @@ const i = class i {
       if (this.provider === "youtube") {
         const e = this.player.getPlayerState();
         e === window.YT.PlayerState.PAUSED || e === window.YT.PlayerState.ENDED ? (this.player.playVideo(), this.playEvent()) : e === window.YT.PlayerState.PLAYING && (this.player.pauseVideo(), this.pauseEvent());
-      } else this.provider === "vimeo" && this.player.getPaused().then((e) => {
+      } else this.provider === "vimeo" ? this.player.getPaused().then((e) => {
         e ? (this.player.play(), this.playEvent()) : (this.player.pause(), this.pauseEvent());
-      });
+      }) : this.provider === "html5" && (this.player.paused ? (this.player.play(), this.playEvent()) : (this.player.pause(), this.pauseEvent()));
     });
   }
 };
