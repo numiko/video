@@ -3,21 +3,21 @@ var l = (a, e, t) => e in a ? s(a, e, { enumerable: !0, configurable: !0, writab
 var r = (a, e, t) => l(a, typeof e != "symbol" ? e + "" : e, t);
 const i = class i {
   /**
-   *
-   * @param {Object} options
-   * @param {HTMLElement} options.playerElement the HTML element that the video is injected into.
-   * @param {String} options.videoId the video's ID
-   * @param {'youtube' | 'vimeo'} options.provider the video's provider
-   * @param {HTMLElement} [options.facade] Optional HTML element that is displayed as a facade, before the video is initiated.
-   * @param {HTMLElement} [options.playPausebutton] Optional HTML element for play/pause functionality.
-   * @param {Function} [options.onVideoPlay] Optional callback function for when the video plays
-   * @param {Function} [options.onVideoPause] Optional callback function for when the video pauses
-   * @param {Function} [options.onBeforeVideoPlay] Optional callback function for before the video plays
+   * Constructs a new instance of VideoEmbed.
+   * @param {Object} options - Options for initializing the video embed.
+   * @param {HTMLElement} options.playerElement - The HTML element that the video is injected into.
+   * @param {string} options.videoId - The video's ID.
+   * @param {'youtube' | 'vimeo' | 'html5'} options.provider - The video's provider.
+   * @param {HTMLElement} [options.facade] - Optional HTML element that is displayed as a facade before the video is initiated.
+   * @param {HTMLElement} [options.playPausebutton] - Optional HTML element for play/pause functionality.
+   * @param {Function} [options.onVideoPlay] - Optional callback function for when the video plays.
+   * @param {Function} [options.onVideoPause] - Optional callback function for when the video pauses.
+   * @param {Function} [options.onBeforeVideoPlay] - Optional callback function for before the video plays.
    */
   constructor(e) {
     /**
-     * Stores an instance of the video player, once initialised.
-     * @type {YT.Player | Vimeo.Player | null}
+     * Stores an instance of the video player, once initialized.
+     * @type {YT.Player | Vimeo.Player | HTMLVideoElement | null}
      */
     r(this, "player", null);
     this.playerElement = e.playerElement, this.videoId = e.videoId, this.provider = e.provider, this.facade = e.facade || null, this.playPausebutton = e.playPausebutton || null, this.onVideoPlay = e.onVideoPlay || null, this.onVideoPause = e.onVideoPause || null, this.onBeforeVideoPlay = e.onBeforeVideoPlay || null, this.facade ? this.facade.addEventListener("click", () => {
@@ -25,7 +25,8 @@ const i = class i {
     }) : this.init();
   }
   /**
-   * Initialises the video player.
+   * Initializes the video player.
+   * @returns {Promise<void>}
    */
   async init() {
     this.onBeforeVideoPlay && this.onBeforeVideoPlay();
@@ -78,6 +79,7 @@ const i = class i {
   }
   /**
    * Event to fire when video is playing
+   * @returns {Void}
    */
   playEvent() {
     var e;
@@ -85,6 +87,7 @@ const i = class i {
   }
   /**
    * Event to fire when video is paused
+   * @returns {Void}
    */
   pauseEvent() {
     var e;
@@ -92,6 +95,7 @@ const i = class i {
   }
   /**
    * Creates the Vimeo player instance.
+   * @returns {Void}
    */
   createVimeoPlayer() {
     this.player = new window.Vimeo.Player(this.playerElement, {
@@ -113,6 +117,7 @@ const i = class i {
   }
   /**
    * Creates the YouTube player instance.
+   * @returns {Void}
    */
   createYouTubePlayer() {
     this.player = new window.YT.Player(this.playerElement, {
@@ -139,6 +144,10 @@ const i = class i {
       }
     });
   }
+  /**
+   * Creates the HTML5 video player instance.
+   * @returns {Void}
+   */
   createHTML5Player() {
     this.player = this.playerElement, this.facade && this.player.play().then(() => {
       this.hideFacade();
@@ -154,6 +163,7 @@ const i = class i {
   }
   /**
    * Adds event listeners to the instance.
+   * @returns {Void}
    */
   addEventListeners() {
     this.playPausebutton.addEventListener("click", () => {
