@@ -163,17 +163,48 @@ const i = class i {
     });
   }
   /**
-   * Adds event listeners to the instance.
-   * @returns {Void}
-   */
+  * Helper function to determine if the player is paused.
+  * @returns {Promise<boolean>} - Resolves to true if paused, false if playing.
+  */
+  isPaused() {
+    if (this.provider === "youtube") {
+      const e = this.player.getPlayerState();
+      return Promise.resolve(e !== window.YT.PlayerState.PLAYING);
+    } else {
+      if (this.provider === "vimeo")
+        return this.player.getPaused();
+      if (this.provider === "html5")
+        return Promise.resolve(this.player.paused);
+    }
+    return Promise.resolve(!0);
+  }
+  /**
+  * Plays the video programmatically.
+  * @returns {Void}
+  */
+  play() {
+    this.isPaused().then((e) => {
+      e && (this.provider === "youtube" ? this.player.playVideo() : this.player.play(), this.playEvent());
+    });
+  }
+  /**
+  * Pauses the video programmatically.
+  * @returns {Void}
+  */
+  pause() {
+    this.isPaused().then((e) => {
+      e || (this.provider === "youtube" ? this.player.pauseVideo() : this.player.pause(), this.pauseEvent());
+    });
+  }
+  /**
+  * Adds event listeners to the instance.
+  * @returns {Void}
+  */
   addEventListeners() {
     this.playPausebutton.addEventListener("click", () => {
-      if (this.provider === "youtube") {
-        const e = this.player.getPlayerState();
-        e === window.YT.PlayerState.PAUSED || e === window.YT.PlayerState.ENDED ? (this.player.playVideo(), this.playEvent()) : e === window.YT.PlayerState.PLAYING && (this.player.pauseVideo(), this.pauseEvent());
-      } else this.provider === "vimeo" ? this.player.getPaused().then((e) => {
-        e ? (this.player.play(), this.playEvent()) : (this.player.pause(), this.pauseEvent());
-      }) : this.provider === "html5" && (this.player.paused ? (this.player.play(), this.playEvent()) : (this.player.pause(), this.pauseEvent()));
+      this.isPaused().then((e) => {
+        e ? this.play() : this.pause();
+      });
     });
   }
 };
