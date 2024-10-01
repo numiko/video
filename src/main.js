@@ -4,16 +4,18 @@ import { VideoEmbed } from '../lib/VideoEmbed';
 /**
  * Video Embed with Facades
  */
-const videoEmbeds = document.querySelectorAll('[data-js-video-embed]');
+const videoEmbedsWithFacades = document.querySelectorAll('[data-js-video-embed-with-facade]');
 
-for (const videoEmbed of videoEmbeds) {
+for (const embed of videoEmbedsWithFacades) {
+
   new VideoEmbed({
-    playerElement: videoEmbed.querySelector('[data-js-video-embed-player]'),
-    videoId: videoEmbed.getAttribute('data-js-video-embed-id'),
-    provider: videoEmbed.getAttribute('data-js-video-embed-provider'),
-    facade: videoEmbed.querySelector('[data-js-video-embed-facade]'),
+    playerElement: embed.querySelector('[data-js-video-embed-player]'),
+    videoId: embed.getAttribute('data-js-video-embed-id'),
+    provider: embed.getAttribute('data-js-video-embed-provider'),
+    facade: embed.querySelector('[data-js-video-embed-facade]'),
+    autoplay: true,
     onBeforeVideoPlay: () => {
-      videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+      embed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
     onVideoPlay: (player) => {
       console.log('Video is playing', player);
@@ -25,6 +27,30 @@ for (const videoEmbed of videoEmbeds) {
 }
 
 /**
+ * Video Embed without Facades
+ */
+const videoEmbedsWithoutFacades = document.querySelectorAll('[data-js-video-embed]');
+
+for (const embed of videoEmbedsWithoutFacades) {
+  new VideoEmbed({
+    playerElement: embed.querySelector('[data-js-video-embed-player]'),
+    videoId: embed.getAttribute('data-js-video-embed-id'),
+    provider: embed.getAttribute('data-js-video-embed-provider'),
+    autoplay: false,
+    onBeforeVideoPlay: () => {
+      embed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+    },
+    onVideoPlay: (player) => {
+      console.log('Video is playing', player);
+    },
+    onVideoPause: () => {
+      console.log('Video is paused');
+    },
+  });
+}
+
+
+/**
  * Video Embed Ambient for heros
  */
 const videoEmbedAmbients = document.querySelectorAll('[data-js-video-embed-ambient]');
@@ -32,10 +58,9 @@ const videoEmbedAmbients = document.querySelectorAll('[data-js-video-embed-ambie
 for (const videoEmbedAmbient of videoEmbedAmbients) {
 
   const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
-  new VideoEmbed({
+  const ambientEmbed = new VideoEmbed({
     playerElement: videoEmbedAmbient.querySelector('[data-js-video-embed-player]'),
     provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
-    playPausebutton: playPausebutton,
     onBeforeVideoPlay: () => {},
     onVideoPlay: () => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
@@ -43,5 +68,15 @@ for (const videoEmbedAmbient of videoEmbedAmbients) {
     onVideoPause: () => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
     },
+  });
+
+  playPausebutton.addEventListener('click', () => {
+    ambientEmbed.isPaused().then((paused) => {
+      if (paused) {
+        ambientEmbed.play();
+      } else {
+        ambientEmbed.pause();
+      }
+    });
   });
 }
