@@ -74,8 +74,10 @@ for (const videoEmbedAmbient of videoEmbedAmbients) {
     ambientEmbed.isPaused().then((paused) => {
       if (paused) {
         ambientEmbed.play();
+        playPausebutton.setAttribute('aria-pressed', 'false');
       } else {
         ambientEmbed.pause();
+        playPausebutton.setAttribute('aria-pressed', 'true');
       }
     });
   });

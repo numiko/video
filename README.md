@@ -58,10 +58,9 @@ Example HTML structure - Embed with Facade
 ```JS
 const videoEmbedAmbient = document.querySelector('[data-js-video-embed-ambient]');
 const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
-new VideoEmbed({
+const heroVideo = new VideoEmbed({
   playerElement: videoEmbedAmbient.querySelector('[data-js-video-embed-player]'),
   provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
-  playPausebutton: playPausebutton,
   onBeforeVideoPlay: () => {},
   onVideoPlay: () => {
     playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
@@ -70,6 +69,18 @@ new VideoEmbed({
     playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
   },
 });
+
+playPausebutton.addEventListener('click', () => {
+    heroVideo.isPaused().then((paused) => {
+      if (paused) {
+        heroVideo.play();
+        playPausebutton.setAttribute('aria-pressed', 'false');
+      } else {
+        heroVideo.pause();
+        playPausebutton.setAttribute('aria-pressed', 'true');
+      }
+    });
+  });
 ```
 ```HTML
 <div class="w-full aspect-[4/1] relative">
@@ -141,7 +152,6 @@ The CSS for the videos is already part of sitekit and included in the component 
 |`videoId`|	string	|The video's ID. Required for YouTube and Vimeo providers.|
 |`provider`	| 'youtube', 'vimeo', 'html5'|	The video's provider.|
 |`facade`|HTMLElement (optional)|	Optional HTML element displayed as a facade before the video is initiated.|
-|`playPausebutton`|	HTMLElement (optional)|	Optional HTML element for play/pause functionality.|
 |`onVideoPlay`|	Function (optional)|	Optional callback function for when the video plays.|
 |`onVideoPause`|	Function (optional)|	Optional callback function for when the video pauses.|
 |`onBeforeVideoPlay`|	Function (optional)|	Optional callback function for before the video plays.
