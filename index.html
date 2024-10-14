@@ -16,7 +16,7 @@
       aspect-ratio: 1;
     }
 
-    .c-video-embed-facade {
+    .c-video-facade {
       @apply relative aspect-video w-full max-w-[600px] bg-black;
 
       iframe, video {
@@ -24,7 +24,7 @@
       }
     }
 
-    .c-video-embed-ambient {
+    .c-video-ambient {
       @apply relative overflow-hidden bg-black;
       @apply absolute top-0 left-0 w-full h-full;
       container-type: size;
@@ -73,12 +73,12 @@
     <!-- Facade Embed - Vimeo  -->
     <div>
       <h2 class="text-3xl mt-8 mb-4">Vimeo - Facade</h2>
-      <div class="c-video-embed-facade" data-js-video-embed-with-facade data-js-video-embed-id="958291103"
-        data-js-video-embed-provider="vimeo">
+      <div class="c-video-facade" data-js-video-with-facade data-js-video-id="958291103"
+        data-js-video-provider="vimeo">
 
-        <div data-js-video-embed-player></div>
+        <div data-js-video-player></div>
 
-        <button type="button" data-js-video-embed-facade class="h-full w-full flex items-center justify-center group"
+        <button type="button" data-js-video-facade class="h-full w-full flex items-center justify-center group"
           aria-label="Play video - Royalty Free Sample Video">
           <img src="https://picsum.photos/1000/563" alt="" loading="lazy"
             class="absolute top-0 left-0 w-full h-full object-cover" />
@@ -94,11 +94,11 @@
     <!-- Facade Embed - Youtube  -->
     <div>
       <h2 class="text-3xl mt-8 mb-4">Youtube - Facade</h2>
-      <div class="c-video-embed-facade" data-js-video-embed-with-facade data-js-video-embed-id="G1hKzCkywM8" data-js-video-embed-provider="youtube">
+      <div class="c-video-facade" data-js-video-with-facade data-js-video-id="G1hKzCkywM8" data-js-video-provider="youtube">
 
-        <div data-js-video-embed-player></div>
+        <div data-js-video-player></div>
 
-        <button type="button" data-js-video-embed-facade class="h-full w-full flex items-center justify-center group"
+        <button type="button" data-js-video-facade class="h-full w-full flex items-center justify-center group"
           aria-label="Play video - Royalty Free Sample Video">
           <img src="https://picsum.photos/1000/563" alt="" loading="lazy"
             class="absolute top-0 left-0 w-full h-full object-cover" />
@@ -115,13 +115,13 @@
     <!-- Facade - HTML5  -->
     <div>
       <h2 class="text-3xl mt-8 mb-4">HTML5 - Facade</h2>
-      <div class="c-video-embed-facade" data-js-video-embed-with-facade  data-js-video-embed-provider="html5">
+      <div class="c-video-facade" data-js-video-with-facade  data-js-video-provider="html5">
 
-        <video data-js-video-embed-player class="absolute top-0 left-0 w-full h-full object-cover" preload="auto" playsinline disablepictureinpicture controls>
+        <video data-js-video-player class="absolute top-0 left-0 w-full h-full object-cover" preload="auto" playsinline disablepictureinpicture controls>
           <source src="https://player.vimeo.com/progressive_redirect/playback/958291103/rendition/1080p/file.mp4?loc=external&amp;log_user=0&amp;signature=43e4026b443ce02e10be32b9c1b973544678e52425064d0454f7cac23a10db1f" type="video/mp4">
         </video>
 
-        <button type="button" data-js-video-embed-facade class="h-full w-full flex items-center justify-center group"
+        <button type="button" data-js-video-facade class="h-full w-full flex items-center justify-center group"
           aria-label="Play video - Royalty Free Sample Video">
           <img src="https://picsum.photos/1000/563" alt="" loading="lazy"
             class="absolute top-0 left-0 w-full h-full object-cover" />
@@ -139,10 +139,10 @@
     <!--  Embed - Vimeo  -->
     <div>
       <h2 class="text-3xl mt-8 mb-4">Vimeo</h2>
-      <div class="c-video-embed-facade" data-js-video-embed data-js-video-embed-id="958291103"
-        data-js-video-embed-provider="vimeo">
+      <div class="c-video-facade" data-js-video data-js-video-id="958291103"
+        data-js-video-provider="vimeo">
 
-        <div data-js-video-embed-player></div>
+        <div data-js-video-player></div>
 
       </div>
     </div>
@@ -150,10 +150,10 @@
     <!--  Embed - Youtube  -->
     <div>
       <h2 class="text-3xl mt-8 mb-4">Youtube</h2>
-      <div class="c-video-embed-facade" data-js-video-embed data-js-video-embed-id="G1hKzCkywM8"
-        data-js-video-embed-provider="youtube">
+      <div class="c-video-facade" data-js-video data-js-video-id="G1hKzCkywM8"
+        data-js-video-provider="youtube">
 
-        <div data-js-video-embed-player></div>
+        <div data-js-video-player></div>
 
 
       </div>
@@ -163,9 +163,9 @@
     <!--  Embed - HTML5  -->
     <div>
       <h2 class="text-3xl mt-8 mb-4">HTML5</h2>
-      <div class="c-video-embed-facade" data-js-video-embed  data-js-video-embed-provider="html5">
+      <div class="c-video-facade" data-js-video  data-js-video-provider="html5">
 
-        <video data-js-video-embed-player preload="auto" controls>
+        <video data-js-video-player preload="auto" controls>
           <source src="https://player.vimeo.com/progressive_redirect/playback/958291103/rendition/1080p/file.mp4?loc=external&amp;log_user=0&amp;signature=43e4026b443ce02e10be32b9c1b973544678e52425064d0454f7cac23a10db1f" type="video/mp4">
         </video>
 
@@ -179,15 +179,15 @@
       <h2 class="text-3xl mt-8 mb-4">Ambient - Vimeo</h2>
 
       <div class="w-full aspect-[4/1] relative">
-        <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="vimeo">
+        <div class="c-video-ambient" data-js-video-ambient data-js-video-provider="vimeo">
 
           <iframe
-            data-js-video-embed-player
+            data-js-video-player
             src="https://player.vimeo.com/video/958291103?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&background=1"
             frameborder="0" title="Video title">
           </iframe>
 
-          <button type="button" data-js-video-embed-button aria-pressed="false"
+          <button type="button" data-js-video-button aria-pressed="false"
             aria-label="Play/Pause Video - Video title" class="absolute bottom-0 right-0 mb-5 mr-5 z-10">
             <svg class="c-icon" focusable="false" aria-hidden="true">
               <use href="#material-pause"></use>
@@ -203,15 +203,15 @@
       <h2 class="text-3xl mt-8 mb-4">Ambient - Youtube</h2>
 
       <div class="w-full aspect-[4/1] relative">
-        <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="youtube">
+        <div class="c-video-ambient" data-js-video-ambient data-js-video-provider="youtube">
 
           <iframe
-            data-js-video-embed-player
+            data-js-video-player
             src="https://www.youtube.com/embed/Jox6R5-rIH0?enablejsapi=1&controls=0&playlist=Jox6R5-rIH0&autoplay=1&mute=1&fs=0&disablekb=1&loop=1&playsinline=1&rel=0"
             frameborder="0" title="Video title">
           </iframe>
 
-          <button type="button" data-js-video-embed-button aria-pressed="false"
+          <button type="button" data-js-video-button aria-pressed="false"
             aria-label="Play/Pause Video - Video title" class="absolute bottom-0 right-0 mb-5 mr-5 z-10">
             <svg class="c-icon" focusable="false" aria-hidden="true">
               <use href="#material-pause"></use>
@@ -228,10 +228,10 @@
       <h2 class="text-3xl mt-8 mb-4">Ambient - HTML5</h2>
 
       <div class="w-full aspect-[4/1] relative">
-        <div class="c-video-embed-ambient" data-js-video-embed-ambient data-js-video-embed-provider="html5">
+        <div class="c-video-ambient" data-js-video-ambient data-js-video-provider="html5">
 
           <video
-            data-js-video-embed-player
+            data-js-video-player
             preload="auto"
             playsinline
             loop
@@ -241,7 +241,7 @@
             <source src="https://player.vimeo.com/progressive_redirect/playback/958291103/rendition/1080p/file.mp4?loc=external&amp;log_user=0&amp;signature=43e4026b443ce02e10be32b9c1b973544678e52425064d0454f7cac23a10db1f" type="video/mp4">
           </video>
 
-          <button type="button" data-js-video-embed-button aria-pressed="false"
+          <button type="button" data-js-video-button aria-pressed="false"
             aria-label="Play/Pause Video - Video title" class="absolute bottom-0 right-0 mb-5 mr-5 z-10">
             <svg class="c-icon" focusable="false" aria-hidden="true">
               <use href="#material-pause"></use>

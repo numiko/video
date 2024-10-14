@@ -1,6 +1,6 @@
 {
-  "name": "@numiko/video-embed",
-  "description": "Initialise and control video embeds currently supporting YouTube and Vimeo.",
+  "name": "@numiko/video",
+  "description": "Initialise and control video embeds currently supporting HTML5, YouTube and Vimeo.",
   "version": "1.0.0",
   "type": "module",
   "private": true,
@@ -16,7 +16,7 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/"
   },
-  "main": "./dist/VideoEmbed.umd.js",
+  "main": "./dist/Video.umd.js",
   "files": [
     "dist",
     "package.json",
@@ -24,8 +24,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/VideoEmbed.es.js",
-      "require": "./dist/VideoEmbed.umd.js"
+      "import": "./dist/Video.es.js",
+      "require": "./dist/Video.umd.js"
     }
   },
   "devDependencies": {

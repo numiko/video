@@ -1,21 +1,21 @@
-import { VideoEmbed } from '../lib/VideoEmbed';
+import { Video } from '../lib/Video';
 
 
 /**
- * Video Embed with Facades
+ * Video with Facades
  */
-const videoEmbedsWithFacades = document.querySelectorAll('[data-js-video-embed-with-facade]');
+const videoWithFacades = document.querySelectorAll('[data-js-video-with-facade]');
 
-for (const embed of videoEmbedsWithFacades) {
-
-  new VideoEmbed({
-    playerElement: embed.querySelector('[data-js-video-embed-player]'),
-    videoId: embed.getAttribute('data-js-video-embed-id'),
-    provider: embed.getAttribute('data-js-video-embed-provider'),
-    facade: embed.querySelector('[data-js-video-embed-facade]'),
+console.log(videoWithFacades);
+for (const video of videoWithFacades) {
+  new Video({
+    playerElement: video.querySelector('[data-js-video-player]'),
+    videoId: video.getAttribute('data-js-video-id'),
+    provider: video.getAttribute('data-js-video-provider'),
+    facade: video.querySelector('[data-js-video-facade]'),
     autoplay: true,
     onBeforeVideoPlay: () => {
-      embed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+      video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
     onVideoPlay: (player) => {
       console.log('Video is playing', player);
@@ -27,18 +27,18 @@ for (const embed of videoEmbedsWithFacades) {
 }
 
 /**
- * Video Embed without Facades
+ * Video without Facades
  */
-const videoEmbedsWithoutFacades = document.querySelectorAll('[data-js-video-embed]');
+const videoWithoutFacades = document.querySelectorAll('[data-js-video]');
 
-for (const embed of videoEmbedsWithoutFacades) {
-  new VideoEmbed({
-    playerElement: embed.querySelector('[data-js-video-embed-player]'),
-    videoId: embed.getAttribute('data-js-video-embed-id'),
-    provider: embed.getAttribute('data-js-video-embed-provider'),
+for (const video of videoWithoutFacades) {
+  new Video({
+    playerElement: video.querySelector('[data-js-video-player]'),
+    videoId: video.getAttribute('data-js-video-id'),
+    provider: video.getAttribute('data-js-video-provider'),
     autoplay: false,
     onBeforeVideoPlay: () => {
-      embed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+      video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
     onVideoPlay: (player) => {
       console.log('Video is playing', player);
@@ -51,16 +51,16 @@ for (const embed of videoEmbedsWithoutFacades) {
 
 
 /**
- * Video Embed Ambient for heros
+ * Video Ambient for heros
  */
-const videoEmbedAmbients = document.querySelectorAll('[data-js-video-embed-ambient]');
+const videoAmbients = document.querySelectorAll('[data-js-video-ambient]');
 
-for (const videoEmbedAmbient of videoEmbedAmbients) {
+for (const videoAmbient of videoAmbients) {
 
-  const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
-  const ambientEmbed = new VideoEmbed({
-    playerElement: videoEmbedAmbient.querySelector('[data-js-video-embed-player]'),
-    provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
+  const playPausebutton = videoAmbient.querySelector('[data-js-video-button]');
+  const videoInstance = new Video({
+    playerElement: videoAmbient.querySelector('[data-js-video-player]'),
+    provider: videoAmbient.getAttribute('data-js-video-provider'),
     onBeforeVideoPlay: () => {},
     onVideoPlay: () => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
@@ -71,12 +71,12 @@ for (const videoEmbedAmbient of videoEmbedAmbients) {
   });
 
   playPausebutton.addEventListener('click', () => {
-    ambientEmbed.isPaused().then((paused) => {
+    videoInstance.isPaused().then((paused) => {
       if (paused) {
-        ambientEmbed.play();
+        videoInstance.play();
         playPausebutton.setAttribute('aria-pressed', 'false');
       } else {
-        ambientEmbed.pause();
+        videoInstance.pause();
         playPausebutton.setAttribute('aria-pressed', 'true');
       }
     });
