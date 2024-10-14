@@ -3,7 +3,7 @@ var h = (s, e, i) => e in s ? l(s, e, { enumerable: !0, configurable: !0, writab
 var r = (s, e, i) => h(s, typeof e != "symbol" ? e + "" : e, i);
 const a = class a {
   /**
-   * Constructs a new instance of VideoEmbed.
+   * Constructs a new instance of Video.
    * @param {Object} options - Options for initializing the video embed.
    * @param {HTMLElement} options.playerElement - The HTML element that the video is injected into.
    * @param {string} options.videoId - The video's ID.
@@ -182,9 +182,9 @@ const a = class a {
   pause() {
     return new Promise((e, i) => {
       this.isPaused().then((t) => {
-        t ? e() : this.provider === "youtube" ? (this.player.pauseVideo(), this.pauseEvent(), e()) : this.player.pause().then(() => {
+        t ? e() : this.provider === "youtube" ? (this.player.pauseVideo(), this.pauseEvent(), e()) : this.provider === "vimeo" ? this.player.pause().then(() => {
           this.pauseEvent(), e();
-        }).catch(i);
+        }).catch(i) : this.provider === "html5" && (this.player.pause(), this.pauseEvent(), e());
       }).catch(i);
     });
   }
@@ -211,5 +211,5 @@ r(a, "youtubeApiPromise", null), /**
 r(a, "vimeoApiPromise", null);
 let o = a;
 export {
-  o as VideoEmbed
+  o as Video
 };
