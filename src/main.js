@@ -4,10 +4,9 @@ import { Video } from '../lib/Video';
 /**
  * Video with Facades
  */
-const videoWithFacades = document.querySelectorAll('[data-js-video-with-facade]');
+const videosWithFacade = document.querySelectorAll('[data-js-video-with-facade]');
 
-console.log(videoWithFacades);
-for (const video of videoWithFacades) {
+for (const video of videosWithFacade) {
   new Video({
     playerElement: video.querySelector('[data-js-video-player]'),
     videoId: video.getAttribute('data-js-video-id'),
@@ -29,9 +28,9 @@ for (const video of videoWithFacades) {
 /**
  * Video without Facades
  */
-const videoWithoutFacades = document.querySelectorAll('[data-js-video]');
+const videosWithoutFacade = document.querySelectorAll('[data-js-video]');
 
-for (const video of videoWithoutFacades) {
+for (const video of videosWithoutFacade) {
   new Video({
     playerElement: video.querySelector('[data-js-video-player]'),
     videoId: video.getAttribute('data-js-video-id'),

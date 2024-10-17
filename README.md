@@ -1,6 +1,6 @@
-# VideoEmbed
+# Video
 
-`VideoEmbed` is a JavaScript class for embedding and controlling video players from YouTube, Vimeo, and HTML5 video sources. It provides a consistent interface for initializing video players, handling play/pause functionality, and managing event callbacks.
+`Video` is a JavaScript class for embedding and controlling video players from YouTube, Vimeo, and HTML5 video sources. It provides a consistent interface for initializing video players, handling play/pause functionality, and managing event callbacks.
 
 ## Installation
 a) Install a specific tag
@@ -15,26 +15,26 @@ npm install ssh://git@bitbucket.org:numiko/video.git##semver:^1.0.0
 ## Usage
 
 ```JS
-import { VideoEmbed } from './path/to/VideoEmbed';
+import { Video } from './path/to/Video';
 ```
 
 ### Video with facade
 ```JS
-const videoEmbed = document.querySelector('[data-js-video]');
-new VideoEmbed({
-    playerElement: videoEmbed.querySelector('[data-js-video-player]'),
-    videoId: videoEmbed.getAttribute('data-js-video-id'),
-    provider: videoEmbed.getAttribute('data-js-video-provider'),
-    facade: videoEmbed.querySelector('[data-js-video-facade]'),
+const video = document.querySelector('[data-js-video]');
+new video({
+    playerElement: video.querySelector('[data-js-video-player]'),
+    videoId: video.getAttribute('data-js-video-id'),
+    provider: video.getAttribute('data-js-video-provider'),
+    facade: video.querySelector('[data-js-video-facade]'),
     onBeforeVideoPlay: () => {
-      videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+      video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     }
   });
 ```
-Example HTML structure - Embed with Facade
+Example HTML structure - Video with Facade
 ```HTML
  <div
-  class="c-video-facade"
+  class="c-video"
   data-js-video
   data-js-video-id="958291103"
   data-js-video-provider="vimeo">
@@ -56,11 +56,11 @@ Example HTML structure - Embed with Facade
 
 ### Video for hero
 ```JS
-const videoEmbedAmbient = document.querySelector('[data-js-video-ambient]');
-const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-button]');
-const heroVideo = new VideoEmbed({
-  playerElement: videoEmbedAmbient.querySelector('[data-js-video-player]'),
-  provider: videoEmbedAmbient.getAttribute('data-js-video-provider'),
+const videoAmbient = document.querySelector('[data-js-video-ambient]');
+const playPausebutton = videoAmbient.querySelector('[data-js-video-button]');
+const heroVideo = new Video({
+  playerElement: videoAmbient.querySelector('[data-js-video-player]'),
+  provider: videoAmbient.getAttribute('data-js-video-provider'),
   onBeforeVideoPlay: () => {},
   onVideoPlay: () => {
     playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
