@@ -1,19 +1,20 @@
-import { VideoEmbed } from '../lib/VideoEmbed';
+import { Video } from '../lib/Video';
 
 
 /**
- * Video Embed with Facades
+ * Video with Facades
  */
-const videoEmbeds = document.querySelectorAll('[data-js-video-embed]');
+const videosWithFacade = document.querySelectorAll('[data-js-video-with-facade]');
 
-for (const videoEmbed of videoEmbeds) {
-  new VideoEmbed({
-    playerElement: videoEmbed.querySelector('[data-js-video-embed-player]'),
-    videoId: videoEmbed.getAttribute('data-js-video-embed-id'),
-    provider: videoEmbed.getAttribute('data-js-video-embed-provider'),
-    facade: videoEmbed.querySelector('[data-js-video-embed-facade]'),
+for (const video of videosWithFacade) {
+  new Video({
+    playerElement: video.querySelector('[data-js-video-player]'),
+    videoId: video.getAttribute('data-js-video-id'),
+    provider: video.getAttribute('data-js-video-provider'),
+    facade: video.querySelector('[data-js-video-facade]'),
+    autoplay: true,
     onBeforeVideoPlay: () => {
-      videoEmbed.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+      video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
     onVideoPlay: (player) => {
       console.log('Video is playing', player);
@@ -25,17 +26,40 @@ for (const videoEmbed of videoEmbeds) {
 }
 
 /**
- * Video Embed Ambient for heros
+ * Video without Facades
  */
-const videoEmbedAmbients = document.querySelectorAll('[data-js-video-embed-ambient]');
+const videosWithoutFacade = document.querySelectorAll('[data-js-video]');
 
-for (const videoEmbedAmbient of videoEmbedAmbients) {
+for (const video of videosWithoutFacade) {
+  new Video({
+    playerElement: video.querySelector('[data-js-video-player]'),
+    videoId: video.getAttribute('data-js-video-id'),
+    provider: video.getAttribute('data-js-video-provider'),
+    autoplay: false,
+    onBeforeVideoPlay: () => {
+      video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
+    },
+    onVideoPlay: (player) => {
+      console.log('Video is playing', player);
+    },
+    onVideoPause: () => {
+      console.log('Video is paused');
+    },
+  });
+}
 
-  const playPausebutton = videoEmbedAmbient.querySelector('[data-js-video-embed-button]');
-  new VideoEmbed({
-    playerElement: videoEmbedAmbient.querySelector('[data-js-video-embed-player]'),
-    provider: videoEmbedAmbient.getAttribute('data-js-video-embed-provider'),
-    playPausebutton: playPausebutton,
+
+/**
+ * Video Ambient for heros
+ */
+const videoAmbients = document.querySelectorAll('[data-js-video-ambient]');
+
+for (const videoAmbient of videoAmbients) {
+
+  const playPausebutton = videoAmbient.querySelector('[data-js-video-button]');
+  const videoInstance = new Video({
+    playerElement: videoAmbient.querySelector('[data-js-video-player]'),
+    provider: videoAmbient.getAttribute('data-js-video-provider'),
     onBeforeVideoPlay: () => {},
     onVideoPlay: () => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
@@ -43,5 +67,17 @@ for (const videoEmbedAmbient of videoEmbedAmbients) {
     onVideoPause: () => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
     },
+  });
+
+  playPausebutton.addEventListener('click', () => {
+    videoInstance.isPaused().then((paused) => {
+      if (paused) {
+        videoInstance.play();
+        playPausebutton.setAttribute('aria-pressed', 'false');
+      } else {
+        videoInstance.pause();
+        playPausebutton.setAttribute('aria-pressed', 'true');
+      }
+    });
   });
 }
