@@ -1,6 +1,6 @@
 var l = Object.defineProperty;
-var h = (s, e, i) => e in s ? l(s, e, { enumerable: !0, configurable: !0, writable: !0, value: i }) : s[e] = i;
-var r = (s, e, i) => h(s, typeof e != "symbol" ? e + "" : e, i);
+var h = (r, e, i) => e in r ? l(r, e, { enumerable: !0, configurable: !0, writable: !0, value: i }) : r[e] = i;
+var s = (r, e, i) => h(r, typeof e != "symbol" ? e + "" : e, i);
 const a = class a {
   /**
    * Constructs a new instance of Video.
@@ -19,7 +19,7 @@ const a = class a {
      * Stores an instance of the video player, once initialized.
      * @type {YT.Player | Vimeo.Player | HTMLVideoElement | null}
      */
-    r(this, "player", null);
+    s(this, "player", null);
     this.playerElement = e.playerElement, this.videoId = e.videoId, this.provider = e.provider, this.facade = e.facade || null, this.onVideoPlay = e.onVideoPlay || null, this.onVideoPause = e.onVideoPause || null, this.onBeforeVideoPlay = e.onBeforeVideoPlay || null, this.autoplay = e.autoplay || !1, this.hasAutoplayed = !1, this.facade ? this.facade.addEventListener("click", () => {
       this.init();
     }) : this.init();
@@ -188,27 +188,16 @@ const a = class a {
       }).catch(i);
     });
   }
-  /**
-  * Adds event listeners to the instance.
-  * @returns {Void}
-  */
-  addEventListeners() {
-    this.playPausebutton.addEventListener("click", () => {
-      this.isPaused().then((e) => {
-        e ? this.play() : this.pause();
-      });
-    });
-  }
 };
 /**
  * Static property to track YouTube API loading Promise.
  * @type {Promise<void> | null}
  */
-r(a, "youtubeApiPromise", null), /**
+s(a, "youtubeApiPromise", null), /**
  * Static property to track Vimeo API loading Promise.
  * @type {Promise<void> | null}
  */
-r(a, "vimeoApiPromise", null);
+s(a, "vimeoApiPromise", null);
 let o = a;
 export {
   o as Video
