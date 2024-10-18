@@ -1,7 +1,7 @@
 {
   "name": "@numiko/video",
   "description": "Initialise and control videos currently supporting HTML5, YouTube and Vimeo.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "private": true,
   "repository": {
