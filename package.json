@@ -25,7 +25,7 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/Video.d.ts"
+      "types": "./dist/Video.d.ts",
       "import": "./dist/Video.es.js",
       "require": "./dist/Video.umd.js"
     }
