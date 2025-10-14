@@ -12,7 +12,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/Video.js'),
+      entry: path.resolve(__dirname, 'lib/Video.ts'),
       name: 'Video',
       fileName: (format) => `Video.${format}.js`
     },
