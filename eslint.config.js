@@ -18,6 +18,7 @@ export default [
       globals: {
         ...globals.node,
         ...globals.browser,
+        // tells ESLint that a global named YT exists at runtime and must not be flagged as undefined
         YT: 'readonly',
       },
     },
