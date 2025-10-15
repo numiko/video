@@ -11,7 +11,7 @@
     "moduleResolution": "Bundler",
     "noUncheckedIndexedAccess": true,
     "types": ["vitest/globals", "youtube"],
-    // Loads type definitions for all Javascript features standardised in ES2015 or ES6
-    "lib": ["ES2015", "DOM"]
+    // Loads type definitions for all Javascript features standardised in ES2021
+    "lib": ["ES2021", "DOM"]
   }
 }
