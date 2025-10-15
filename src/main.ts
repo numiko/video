@@ -1,6 +1,5 @@
 import { Video } from '../lib/Video';
-
-type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+import type { VideoProvider } from '../lib/Video';
 
 /**
  * Type guard to check if a value is a valid VideoProvider
