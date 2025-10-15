@@ -78,7 +78,7 @@ export declare class Video {
     pause(): Promise<void>;
 }
 
-export declare interface VideoOptions {
+export declare type VideoOptions = {
     playerElement: HTMLElement;
     videoId?: string;
     provider: VideoProvider;
@@ -87,14 +87,14 @@ export declare interface VideoOptions {
     onVideoPause?: ((player: PlayerInstance) => void) | null;
     onBeforeVideoPlay?: (() => void) | null;
     autoplay?: boolean;
-}
+};
 
 export declare type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
-declare interface YouTubePlayer {
+declare type YouTubePlayer = {
     playVideo(): void;
     pauseVideo(): void;
     getPlayerState(): number;
-}
+};
 
 export { }
