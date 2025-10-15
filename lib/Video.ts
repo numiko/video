@@ -1,4 +1,6 @@
 // YouTube types are provided globally via tsconfig "types": ["youtube"]
+// This is necessary because the YouTube type definitions are not accessible as a module import;
+// instead, they're injected globally by the TypeScript configuration.
 import type VimeoPlayer from '@vimeo/player';
 
 // Extend Window interface for API checks
@@ -13,7 +15,7 @@ declare global {
 }
 
 // Video provider types
-type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+export type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
 // Local interface for YouTube player to avoid exposing YT namespace in public API
 interface YouTubePlayer {
@@ -23,10 +25,10 @@ interface YouTubePlayer {
 }
 
 
-type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
+export type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
 
 // Video options interface
-interface VideoOptions {
+export interface VideoOptions {
   playerElement: HTMLElement;
   videoId?: string;
   provider: VideoProvider;

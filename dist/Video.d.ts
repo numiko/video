@@ -1,6 +1,6 @@
 import { default as default_2 } from '@vimeo/player';
 
-declare type PlayerInstance = YouTubePlayer | default_2 | HTMLVideoElement;
+export declare type PlayerInstance = YouTubePlayer | default_2 | HTMLVideoElement;
 
 export declare class Video {
     /**
@@ -78,7 +78,7 @@ export declare class Video {
     pause(): Promise<void>;
 }
 
-declare interface VideoOptions {
+export declare interface VideoOptions {
     playerElement: HTMLElement;
     videoId?: string;
     provider: VideoProvider;
@@ -89,7 +89,7 @@ declare interface VideoOptions {
     autoplay?: boolean;
 }
 
-declare type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+export declare type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
 declare interface YouTubePlayer {
     playVideo(): void;
