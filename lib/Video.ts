@@ -14,19 +14,20 @@ declare global {
   }
 }
 
+// Video provider types
 export type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
-// Local interface for YouTube player to avoid exposing YT namespace in public API
-interface YouTubePlayer {
+// Local type for YouTube player to avoid exposing YT namespace in public API
+type YouTubePlayer = {
   playVideo(): void;
   pauseVideo(): void;
   getPlayerState(): number;
-}
+};
 
 
 export type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
 
-export interface VideoOptions {
+export type VideoOptions = {
   playerElement: HTMLElement;
   videoId?: string;
   provider: VideoProvider;
@@ -35,7 +36,7 @@ export interface VideoOptions {
   onVideoPause?: ((player: PlayerInstance) => void) | null;
   onBeforeVideoPlay?: (() => void) | null;
   autoplay?: boolean;
-}
+};
 
 export class Video {
   /**
