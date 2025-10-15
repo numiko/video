@@ -1,4 +1,4 @@
-const r = class r {
+const a = class a {
   /**
    * Constructs a new instance of Video.
    */
@@ -22,7 +22,7 @@ const r = class r {
    * Loads the YouTube API if it hasn't already been loaded.
    */
   async loadYouTubeApi() {
-    return r.youtubeApiPromise || (r.youtubeApiPromise = new Promise((e) => {
+    return a.youtubeApiPromise || (a.youtubeApiPromise = new Promise((e) => {
       if (window.YT && window.YT.Player) {
         e();
         return;
@@ -31,13 +31,13 @@ const r = class r {
       i.src = "https://www.youtube.com/iframe_api", document.head.appendChild(i), window.onYouTubeIframeAPIReady = () => {
         e();
       };
-    })), r.youtubeApiPromise;
+    })), a.youtubeApiPromise;
   }
   /**
    * Loads the Vimeo API if it hasn't already been loaded.
    */
   async loadVimeoApi() {
-    return r.vimeoApiPromise || (r.vimeoApiPromise = new Promise((e) => {
+    return a.vimeoApiPromise || (a.vimeoApiPromise = new Promise((e) => {
       if (window.Vimeo) {
         e();
         return;
@@ -46,7 +46,7 @@ const r = class r {
       i.src = "https://player.vimeo.com/api/player.js", i.onload = () => {
         e();
       }, document.head.appendChild(i);
-    })), r.vimeoApiPromise;
+    })), a.vimeoApiPromise;
   }
   /**
    * Creates the Vimeo player instance.
@@ -55,10 +55,6 @@ const r = class r {
     return new Promise((e, i) => {
       if (!window.Vimeo) {
         i(new Error("Vimeo API not loaded"));
-        return;
-      }
-      if (!this.videoId) {
-        i(new Error("Video ID is required for Vimeo"));
         return;
       }
       this.player = new window.Vimeo.Player(this.playerElement, {
@@ -72,11 +68,11 @@ const r = class r {
         t.on("loaded", () => {
           this.hideFacade(), this.autoplay && !this.hasAutoplayed ? (this.hasAutoplayed = !0, t.play().then(() => {
             this.playEvent(), e();
-          }).catch((a) => {
-            console.error("Error playing the video:", a), i(a);
+          }).catch((r) => {
+            console.error("Error playing the video:", r), i(r);
           })) : e();
-        }), t.on("play", this.playEvent.bind(this)), t.on("pause", this.pauseEvent.bind(this)), t.on("error", (a) => {
-          console.error("Vimeo player error:", a), i(a);
+        }), t.on("play", this.playEvent.bind(this)), t.on("pause", this.pauseEvent.bind(this)), t.on("error", (r) => {
+          console.error("Vimeo player error:", r), i(r);
         });
       }).catch(i);
     });
@@ -88,10 +84,6 @@ const r = class r {
     return new Promise((e, i) => {
       if (!window.YT) {
         i(new Error("YouTube API not loaded"));
-        return;
-      }
-      if (!this.videoId) {
-        i(new Error("Video ID is required for YouTube"));
         return;
       }
       this.player = new window.YT.Player(this.playerElement, {
@@ -203,8 +195,8 @@ const r = class r {
     });
   }
 };
-r.youtubeApiPromise = null, r.vimeoApiPromise = null;
-let o = r;
+a.youtubeApiPromise = null, a.vimeoApiPromise = null;
+let o = a;
 export {
   o as Video
 };

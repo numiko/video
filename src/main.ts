@@ -21,6 +21,7 @@ videosWithFacade.forEach((video: HTMLElement): void => {
   const facade = video.querySelector<HTMLElement>('[data-js-video-facade]');
 
   if (!playerElement || !isVideoProvider(providerAttr)) return;
+
   const provider = providerAttr;
 
   // Type guard for videoId for the providers that require it

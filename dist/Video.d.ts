@@ -99,7 +99,7 @@ declare class VimeoPlayer {
 }
 
 declare interface VimeoPlayerOptions {
-    id: string;
+    id?: string;
     transparent: boolean;
     autopause: boolean;
     autoplay: number;
@@ -121,7 +121,7 @@ declare interface YTPlayerEvents {
 }
 
 declare interface YTPlayerOptions {
-    videoId: string;
+    videoId?: string;
     width: string;
     height: string;
     playerVars: YTPlayerVars;

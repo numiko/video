@@ -29,7 +29,7 @@ interface YTPlayerEvents {
 }
 
 interface YTPlayerOptions {
-  videoId: string;
+  videoId?: string;
   width: string;
   height: string;
   playerVars: YTPlayerVars;
@@ -45,7 +45,7 @@ declare class YTPlayer {
 
 // Vimeo Player type definitions
 interface VimeoPlayerOptions {
-  id: string;
+  id?: string;
   transparent: boolean;
   autopause: boolean;
   autoplay: number;
@@ -210,11 +210,6 @@ export class Video {
         return;
       }
 
-      if (!this.videoId) {
-        reject(new Error('Video ID is required for Vimeo'));
-        return;
-      }
-
       this.player = new window.Vimeo.Player(this.playerElement, {
         id: this.videoId,
         transparent: false,
@@ -259,11 +254,6 @@ export class Video {
     return new Promise((resolve, reject) => {
       if (!window.YT) {
         reject(new Error('YouTube API not loaded'));
-        return;
-      }
-
-      if (!this.videoId) {
-        reject(new Error('Video ID is required for YouTube'));
         return;
       }
 
