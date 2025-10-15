@@ -16,13 +16,15 @@ const videosWithFacade = document.querySelectorAll<HTMLElement>('[data-js-video-
 
 videosWithFacade.forEach((video: HTMLElement): void => {
   const playerElement = video.querySelector<HTMLElement>('[data-js-video-player]');
-  const videoId = video.getAttribute('data-js-video-id');
+  const videoId = video.getAttribute('data-js-video-id') || undefined;
   const providerAttr = video.getAttribute('data-js-video-provider');
   const facade = video.querySelector<HTMLElement>('[data-js-video-facade]');
 
-  if (!playerElement || !videoId || !isVideoProvider(providerAttr)) return;
-
+  if (!playerElement || !isVideoProvider(providerAttr)) return;
   const provider = providerAttr;
+
+  // Type guard for videoId for the providers that require it
+  if (!videoId && (provider === 'youtube' || provider === 'vimeo')) return;
 
   new Video({
     playerElement,
