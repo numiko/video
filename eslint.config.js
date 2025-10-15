@@ -10,6 +10,7 @@ export default [
   // Base recommended config
   js.configs.recommended,
   ...tseslint.configs.recommended,
+
   // Custom configuration for your files
   {
     files: ['**/*.{js,ts}'],
@@ -17,7 +18,6 @@ export default [
       globals: {
         ...globals.node,
         ...globals.browser,
-        YT: 'readonly',
       },
     },
     plugins: {
@@ -26,13 +26,13 @@ export default [
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-undef': 'warn',
-      // 'off' because it does not work with TypeScript and function signatures
       'no-unused-vars': 'off',
       'no-shadow': 'warn',
-      '@stylistic/semi': ['error', 'always'],
-      '@stylistic/quotes': ['error', 'single'],
-      '@stylistic/indent': ['error', 2],
+      '@stylistic/semi': ['warn', 'always'],
+      '@stylistic/quotes': ['warn', 'single'],
+      '@stylistic/indent': ['warn', 2],
       '@stylistic/keyword-spacing': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
     }
   }
 ];
