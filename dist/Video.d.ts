@@ -1,4 +1,6 @@
-declare type PlayerInstance = YTPlayer | VimeoPlayer | HTMLVideoElement;
+import { default as default_2 } from '@vimeo/player';
+
+declare type PlayerInstance = YouTubePlayer | default_2 | HTMLVideoElement;
 
 export declare class Video {
     /**
@@ -89,49 +91,10 @@ declare interface VideoOptions {
 
 declare type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
-declare class VimeoPlayer {
-    constructor(element: HTMLElement, options: VimeoPlayerOptions);
-    ready(): Promise<void>;
-    on(event: string, callback: (data?: unknown) => void): void;
-    play(): Promise<void>;
-    pause(): Promise<void>;
-    getPaused(): Promise<boolean>;
-}
-
-declare interface VimeoPlayerOptions {
-    id?: string;
-    transparent: boolean;
-    autopause: boolean;
-    autoplay: number;
-}
-
-declare class YTPlayer {
-    constructor(element: HTMLElement, options: YTPlayerOptions);
+declare interface YouTubePlayer {
     playVideo(): void;
     pauseVideo(): void;
     getPlayerState(): number;
-}
-
-declare interface YTPlayerEvents {
-    onReady?: () => void;
-    onStateChange?: (event: {
-        data: number;
-    }) => void;
-    onError?: (error: unknown) => void;
-}
-
-declare interface YTPlayerOptions {
-    videoId?: string;
-    width: string;
-    height: string;
-    playerVars: YTPlayerVars;
-    events: YTPlayerEvents;
-}
-
-declare interface YTPlayerVars {
-    playsinline: number;
-    rel: number;
-    autoplay: number;
 }
 
 export { }

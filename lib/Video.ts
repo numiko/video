@@ -1,13 +1,10 @@
-// Extend Window interface for third-party APIs
+/// <reference types="youtube" />
+import type VimeoPlayer from '@vimeo/player';
+
+// Extend Window interface for API checks
 declare global {
   interface Window {
-    YT?: {
-      Player: typeof YTPlayer;
-      PlayerState: {
-        PLAYING: number;
-        PAUSED: number;
-      };
-    };
+    YT?: typeof YT;
     Vimeo?: {
       Player: typeof VimeoPlayer;
     };
@@ -15,54 +12,18 @@ declare global {
   }
 }
 
-// YouTube Player type definitions
-interface YTPlayerVars {
-  playsinline: number;
-  rel: number;
-  autoplay: number;
-}
+// Video provider types
+type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
-interface YTPlayerEvents {
-  onReady?: () => void;
-  onStateChange?: (event: { data: number }) => void;
-  onError?: (error: unknown) => void;
-}
-
-interface YTPlayerOptions {
-  videoId?: string;
-  width: string;
-  height: string;
-  playerVars: YTPlayerVars;
-  events: YTPlayerEvents;
-}
-
-declare class YTPlayer {
-  constructor(element: HTMLElement, options: YTPlayerOptions);
+// Local interface for YouTube player to avoid exposing YT namespace in public API
+interface YouTubePlayer {
   playVideo(): void;
   pauseVideo(): void;
   getPlayerState(): number;
 }
 
-// Vimeo Player type definitions
-interface VimeoPlayerOptions {
-  id?: string;
-  transparent: boolean;
-  autopause: boolean;
-  autoplay: number;
-}
 
-declare class VimeoPlayer {
-  constructor(element: HTMLElement, options: VimeoPlayerOptions);
-  ready(): Promise<void>;
-  on(event: string, callback: (data?: unknown) => void): void;
-  play(): Promise<void>;
-  pause(): Promise<void>;
-  getPaused(): Promise<boolean>;
-}
-
-// Video provider types
-type VideoProvider = 'youtube' | 'vimeo' | 'html5';
-type PlayerInstance = YTPlayer | VimeoPlayer | HTMLVideoElement;
+type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
 
 // Video options interface
 interface VideoOptions {
@@ -214,7 +175,7 @@ export class Video {
         id: this.videoId,
         transparent: false,
         autopause: true,
-        autoplay: this.autoplay ? 1 : 0
+        autoplay: this.autoplay
       });
 
       const vimeoPlayer = this.player;
@@ -270,7 +231,7 @@ export class Video {
           onReady: () => {
             this.hideFacade();
             if (this.autoplay && !this.hasAutoplayed) {
-              const ytPlayer = this.player as YTPlayer;
+              const ytPlayer = this.player as YT.Player;
               ytPlayer.playVideo();
               this.hasAutoplayed = true;
             }
@@ -357,7 +318,7 @@ export class Video {
     }
 
     if (this.provider === 'youtube' && window.YT) {
-      const ytPlayer = this.player as YTPlayer;
+      const ytPlayer = this.player as YT.Player;
       return Promise.resolve(ytPlayer.getPlayerState() !== window.YT.PlayerState.PLAYING);
     } else if (this.provider === 'vimeo') {
       const vimeoPlayer = this.player as VimeoPlayer;
@@ -382,7 +343,7 @@ export class Video {
       this.isPaused().then((paused: boolean) => {
         if (paused) {
           if (this.provider === 'youtube') {
-            const ytPlayer = this.player as YTPlayer;
+            const ytPlayer = this.player as YT.Player;
             ytPlayer.playVideo();
             this.playEvent();
             resolve();
@@ -419,7 +380,7 @@ export class Video {
       this.isPaused().then((paused: boolean) => {
         if (!paused) {
           if (this.provider === 'youtube') {
-            const ytPlayer = this.player as YTPlayer;
+            const ytPlayer = this.player as YT.Player;
             ytPlayer.pauseVideo();
             this.pauseEvent();
             resolve();

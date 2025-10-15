@@ -61,7 +61,7 @@ const a = class a {
         id: this.videoId,
         transparent: !1,
         autopause: !0,
-        autoplay: this.autoplay ? 1 : 0
+        autoplay: this.autoplay
       });
       const t = this.player;
       t.ready().then(() => {
