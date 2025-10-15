@@ -1,4 +1,4 @@
-/// <reference types="youtube" />
+// YouTube types are provided globally via tsconfig "types": ["youtube"]
 import type VimeoPlayer from '@vimeo/player';
 
 // Extend Window interface for API checks
