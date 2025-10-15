@@ -18,6 +18,7 @@ export default [
       globals: {
         ...globals.node,
         ...globals.browser,
+        YT: 'readonly',
       },
     },
     plugins: {
