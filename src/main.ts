@@ -1,76 +1,107 @@
 import { Video } from '../lib/Video';
 
+type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+
+/**
+ * Type guard to check if a value is a valid VideoProvider
+ */
+function isVideoProvider(value: string | null): value is VideoProvider {
+  return value === 'youtube' || value === 'vimeo' || value === 'html5';
+}
 
 /**
  * Video with Facades
  */
-const videosWithFacade = document.querySelectorAll('[data-js-video-with-facade]');
+const videosWithFacade = document.querySelectorAll<HTMLElement>('[data-js-video-with-facade]');
 
-for (const video of videosWithFacade) {
+videosWithFacade.forEach((video: HTMLElement): void => {
+  const playerElement = video.querySelector<HTMLElement>('[data-js-video-player]');
+  const videoId = video.getAttribute('data-js-video-id');
+  const providerAttr = video.getAttribute('data-js-video-provider');
+  const facade = video.querySelector<HTMLElement>('[data-js-video-facade]');
+
+  if (!playerElement || !videoId || !isVideoProvider(providerAttr)) return;
+
+  const provider = providerAttr;
+
   new Video({
-    playerElement: video.querySelector('[data-js-video-player]'),
-    videoId: video.getAttribute('data-js-video-id'),
-    provider: video.getAttribute('data-js-video-provider'),
-    facade: video.querySelector('[data-js-video-facade]'),
+    playerElement,
+    videoId,
+    provider,
+    facade,
     autoplay: true,
-    onBeforeVideoPlay: () => {
+    onBeforeVideoPlay: (): void => {
       video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
-    onVideoPlay: (player) => {
+    onVideoPlay: (player): void => {
       console.log('Video is playing', player);
     },
-    onVideoPause: () => {
+    onVideoPause: (): void => {
       console.log('Video is paused');
     },
   });
-}
+});
 
 /**
  * Video without Facades
  */
-const videosWithoutFacade = document.querySelectorAll('[data-js-video]');
+const videosWithoutFacade = document.querySelectorAll<HTMLElement>('[data-js-video]');
 
-for (const video of videosWithoutFacade) {
+videosWithoutFacade.forEach((video: HTMLElement): void => {
+  const playerElement = video.querySelector<HTMLElement>('[data-js-video-player]');
+  const videoId = video.getAttribute('data-js-video-id');
+  const providerAttr = video.getAttribute('data-js-video-provider');
+
+  if (!playerElement || !videoId || !isVideoProvider(providerAttr)) return;
+
+  const provider = providerAttr;
+
   new Video({
-    playerElement: video.querySelector('[data-js-video-player]'),
-    videoId: video.getAttribute('data-js-video-id'),
-    provider: video.getAttribute('data-js-video-provider'),
+    playerElement,
+    videoId,
+    provider,
     autoplay: false,
-    onBeforeVideoPlay: () => {
+    onBeforeVideoPlay: (): void => {
       video.querySelector('.c-icon use')?.setAttribute('href', '#animated-loader');
     },
-    onVideoPlay: (player) => {
+    onVideoPlay: (player): void => {
       console.log('Video is playing', player);
     },
-    onVideoPause: () => {
+    onVideoPause: (): void => {
       console.log('Video is paused');
     },
   });
-}
+});
 
 
 /**
  * Video Ambient for heros
  */
-const videoAmbients = document.querySelectorAll('[data-js-video-ambient]');
+const videoAmbients = document.querySelectorAll<HTMLElement>('[data-js-video-ambient]');
 
-for (const videoAmbient of videoAmbients) {
+videoAmbients.forEach((videoAmbient: HTMLElement): void => {
+  const playPausebutton = videoAmbient.querySelector<HTMLElement>('[data-js-video-button]');
+  const playerElement = videoAmbient.querySelector<HTMLElement>('[data-js-video-player]');
+  const providerAttr = videoAmbient.getAttribute('data-js-video-provider');
 
-  const playPausebutton = videoAmbient.querySelector('[data-js-video-button]');
+  if (!playPausebutton || !playerElement || !isVideoProvider(providerAttr)) return;
+
+  const provider = providerAttr;
+
   const videoInstance = new Video({
-    playerElement: videoAmbient.querySelector('[data-js-video-player]'),
-    provider: videoAmbient.getAttribute('data-js-video-provider'),
-    onBeforeVideoPlay: () => {},
-    onVideoPlay: () => {
+    playerElement,
+    provider,
+    onBeforeVideoPlay: (): void => { },
+    onVideoPlay: (): void => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
     },
-    onVideoPause: () => {
+    onVideoPause: (): void => {
       playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
     },
   });
 
-  playPausebutton.addEventListener('click', () => {
-    videoInstance.isPaused().then((paused) => {
+  playPausebutton.addEventListener('click', (): void => {
+    videoInstance.isPaused().then((paused: boolean): void => {
       if (paused) {
         videoInstance.play();
         playPausebutton.setAttribute('aria-pressed', 'false');
@@ -80,4 +111,4 @@ for (const videoAmbient of videoAmbients) {
       }
     });
   });
-}
+});
