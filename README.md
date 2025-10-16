@@ -143,3 +143,7 @@ The CSS for the videos is already part of sitekit and included in the component 
   }
 }
 ```
+
+## API
+
+See [documentation](./docs/README.md) for more detail on how to use the package.
