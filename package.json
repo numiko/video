@@ -15,7 +15,7 @@
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
-    "generate-docs": "typedoc src/main.ts --plugin typedoc-plugin-markdown --mergeReadme true --readme none --plugin typedoc-plugin-mdn-links",
+    "generate-docs": "typedoc lib/Video.ts --plugin typedoc-plugin-markdown --mergeReadme true --readme none --plugin typedoc-plugin-mdn-links",
     "release": "release-it"
   },
   "main": "./dist/Video.umd.js",

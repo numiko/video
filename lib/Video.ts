@@ -409,5 +409,6 @@ export {
   Video,
   type VideoProvider,
   type VideoOptions,
-  type PlayerInstance
+  type PlayerInstance,
+  type YouTubePlayer,
 };
