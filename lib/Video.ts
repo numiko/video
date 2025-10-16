@@ -88,6 +88,27 @@ export class Video {
   }
 
   /**
+   * Type predicate to check if the player is a YouTube player.
+   */
+  private isYouTubePlayer(player: PlayerInstance | null): player is YT.Player {
+    return this.provider === 'youtube' && player !== null;
+  }
+
+  /**
+   * Type predicate to check if the player is a Vimeo player.
+   */
+  private isVimeoPlayer(player: PlayerInstance | null): player is VimeoPlayer {
+    return this.provider === 'vimeo' && player !== null;
+  }
+
+  /**
+   * Type predicate to check if the player is an HTML5 video element.
+   */
+  private isHTML5Player(player: PlayerInstance | null): player is HTMLVideoElement {
+    return this.provider === 'html5' && player !== null;
+  }
+
+  /**
    * Initializes the video player.
    */
   async init(): Promise<void> {
@@ -232,9 +253,10 @@ export class Video {
           onReady: () => {
             this.hideFacade();
             if (this.autoplay && !this.hasAutoplayed) {
-              const ytPlayer = this.player as YT.Player;
-              ytPlayer.playVideo();
-              this.hasAutoplayed = true;
+              if (this.isYouTubePlayer(this.player)) {
+                this.player.playVideo();
+                this.hasAutoplayed = true;
+              }
             }
             resolve();
           },
@@ -261,12 +283,17 @@ export class Video {
    */
   createHTML5Player(): void {
     this.player = this.playerElement as HTMLVideoElement;
-    const html5Player = this.player;
+
+    // checks for HTMLVideoElement type already
+    if (!this.isHTML5Player(this.player)) {
+      console.error('Failed to initialize HTML5 player');
+      return;
+    }
 
     this.hideFacade();
 
     if (this.autoplay && !this.hasAutoplayed) {
-      html5Player.play().then(() => {
+      this.player.play().then(() => {
         this.hasAutoplayed = true;
         this.playEvent();
       }).catch((error: unknown) => {
@@ -274,10 +301,10 @@ export class Video {
       });
     }
 
-    html5Player.addEventListener('play', this.playEvent.bind(this));
-    html5Player.addEventListener('pause', this.pauseEvent.bind(this));
+    this.player.addEventListener('play', this.playEvent.bind(this));
+    this.player.addEventListener('pause', this.pauseEvent.bind(this));
 
-    html5Player.addEventListener('error', (error: Event) => {
+    this.player.addEventListener('error', (error: Event) => {
       console.error('HTML5 player error:', error);
     });
   }
@@ -318,15 +345,12 @@ export class Video {
       return Promise.resolve(true);
     }
 
-    if (this.provider === 'youtube' && window.YT) {
-      const ytPlayer = this.player as YT.Player;
-      return Promise.resolve(ytPlayer.getPlayerState() !== window.YT.PlayerState.PLAYING);
-    } else if (this.provider === 'vimeo') {
-      const vimeoPlayer = this.player as VimeoPlayer;
-      return vimeoPlayer.getPaused();
-    } else if (this.provider === 'html5') {
-      const html5Player = this.player as HTMLVideoElement;
-      return Promise.resolve(html5Player.paused);
+    if (this.isYouTubePlayer(this.player) && window.YT) {
+      return Promise.resolve(this.player.getPlayerState() !== window.YT.PlayerState.PLAYING);
+    } else if (this.isVimeoPlayer(this.player)) {
+      return this.player.getPaused();
+    } else if (this.isHTML5Player(this.player)) {
+      return Promise.resolve(this.player.paused);
     }
     return Promise.resolve(true);
   }
@@ -343,20 +367,17 @@ export class Video {
 
       this.isPaused().then((paused: boolean) => {
         if (paused) {
-          if (this.provider === 'youtube') {
-            const ytPlayer = this.player as YT.Player;
-            ytPlayer.playVideo();
+          if (this.isYouTubePlayer(this.player)) {
+            this.player.playVideo();
             this.playEvent();
             resolve();
-          } else if (this.provider === 'vimeo') {
-            const vimeoPlayer = this.player as VimeoPlayer;
-            vimeoPlayer.play().then(() => {
+          } else if (this.isVimeoPlayer(this.player)) {
+            this.player.play().then(() => {
               this.playEvent();
               resolve();
             }).catch(reject);
-          } else if (this.provider === 'html5') {
-            const html5Player = this.player as HTMLVideoElement;
-            html5Player.play().then(() => {
+          } else if (this.isHTML5Player(this.player)) {
+            this.player.play().then(() => {
               this.playEvent();
               resolve();
             }).catch(reject);
@@ -380,20 +401,17 @@ export class Video {
 
       this.isPaused().then((paused: boolean) => {
         if (!paused) {
-          if (this.provider === 'youtube') {
-            const ytPlayer = this.player as YT.Player;
-            ytPlayer.pauseVideo();
+          if (this.isYouTubePlayer(this.player)) {
+            this.player.pauseVideo();
             this.pauseEvent();
             resolve();
-          } else if (this.provider === 'vimeo') {
-            const vimeoPlayer = this.player as VimeoPlayer;
-            vimeoPlayer.pause().then(() => {
+          } else if (this.isVimeoPlayer(this.player)) {
+            this.player.pause().then(() => {
               this.pauseEvent();
               resolve();
             }).catch(reject);
-          } else if (this.provider === 'html5') {
-            const html5Player = this.player as HTMLVideoElement;
-            html5Player.pause();
+          } else if (this.isHTML5Player(this.player)) {
+            this.player.pause();
             this.pauseEvent();
             resolve();
           }

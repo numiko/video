@@ -29,6 +29,18 @@ export declare class Video {
      */
     constructor(options: VideoOptions);
     /**
+     * Type predicate to check if the player is a YouTube player.
+     */
+    private isYouTubePlayer;
+    /**
+     * Type predicate to check if the player is a Vimeo player.
+     */
+    private isVimeoPlayer;
+    /**
+     * Type predicate to check if the player is an HTML5 video element.
+     */
+    private isHTML5Player;
+    /**
      * Initializes the video player.
      */
     init(): Promise<void>;
