@@ -59,6 +59,7 @@
         "vitest run"
       ],
       "after:bump": [
+        "npm run generate-docs",
         "npm run build"
       ]
     }
