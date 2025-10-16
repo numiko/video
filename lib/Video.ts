@@ -15,7 +15,7 @@ declare global {
 }
 
 // Video provider types
-export type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
 // Local type for YouTube player to avoid exposing YT namespace in public API
 type YouTubePlayer = {
@@ -25,9 +25,9 @@ type YouTubePlayer = {
 };
 
 
-export type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
+type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
 
-export type VideoOptions = {
+type VideoOptions = {
   playerElement: HTMLElement;
   videoId?: string;
   provider: VideoProvider;
@@ -38,7 +38,7 @@ export type VideoOptions = {
   autoplay?: boolean;
 };
 
-export class Video {
+class Video {
   /**
    * Static property to track YouTube API loading Promise.
    */
@@ -404,3 +404,10 @@ export class Video {
     });
   }
 }
+
+export {
+  Video,
+  type VideoProvider,
+  type VideoOptions,
+  type PlayerInstance
+};
