@@ -26,3 +26,5 @@ coverage/*
 
 # Ignore test reports
 reports/
+# Ignore docs
+docs/
