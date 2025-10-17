@@ -4,10 +4,13 @@ import eslint from 'vite-plugin-eslint';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [eslint(), dts({
-    outDir: 'dist',
-    rollupTypes: true
-  })],
+  plugins: [
+    eslint(),
+    dts({
+      outDir: 'dist',
+      rollupTypes: true
+    }),
+  ],
   server: {
     watch: {
       include: ['src/**', 'lib/**']

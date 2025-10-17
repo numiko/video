@@ -8,6 +8,24 @@ const a = class a {
     }) : this.init();
   }
   /**
+   * Type predicate to check if the player is a YouTube player.
+   */
+  isYouTubePlayer(e) {
+    return this.provider === "youtube" && e !== null;
+  }
+  /**
+   * Type predicate to check if the player is a Vimeo player.
+   */
+  isVimeoPlayer(e) {
+    return this.provider === "vimeo" && e !== null;
+  }
+  /**
+   * Type predicate to check if the player is an HTML5 video element.
+   */
+  isHTML5Player(e) {
+    return this.provider === "html5" && e !== null;
+  }
+  /**
    * Initializes the video player.
    */
   async init() {
@@ -97,7 +115,7 @@ const a = class a {
         },
         events: {
           onReady: () => {
-            this.hideFacade(), this.autoplay && !this.hasAutoplayed && (this.player.playVideo(), this.hasAutoplayed = !0), e();
+            this.hideFacade(), this.autoplay && !this.hasAutoplayed && this.isYouTubePlayer(this.player) && (this.player.playVideo(), this.hasAutoplayed = !0), e();
           },
           onStateChange: (t) => {
             window.YT && (t.data === window.YT.PlayerState.PLAYING && this.playEvent(), t.data === window.YT.PlayerState.PAUSED && this.pauseEvent());
@@ -113,14 +131,16 @@ const a = class a {
    * Creates the HTML5 video player instance.
    */
   createHTML5Player() {
-    this.player = this.playerElement;
-    const e = this.player;
-    this.hideFacade(), this.autoplay && !this.hasAutoplayed && e.play().then(() => {
+    if (this.player = this.playerElement, !this.isHTML5Player(this.player)) {
+      console.error("Failed to initialize HTML5 player");
+      return;
+    }
+    this.hideFacade(), this.autoplay && !this.hasAutoplayed && this.player.play().then(() => {
       this.hasAutoplayed = !0, this.playEvent();
-    }).catch((i) => {
-      console.error("Error playing the video:", i);
-    }), e.addEventListener("play", this.playEvent.bind(this)), e.addEventListener("pause", this.pauseEvent.bind(this)), e.addEventListener("error", (i) => {
-      console.error("HTML5 player error:", i);
+    }).catch((e) => {
+      console.error("Error playing the video:", e);
+    }), this.player.addEventListener("play", this.playEvent.bind(this)), this.player.addEventListener("pause", this.pauseEvent.bind(this)), this.player.addEventListener("error", (e) => {
+      console.error("HTML5 player error:", e);
     });
   }
   /**
@@ -145,20 +165,7 @@ const a = class a {
    * Helper function to determine if the player is paused.
    */
   isPaused() {
-    if (!this.player)
-      return Promise.resolve(!0);
-    if (this.provider === "youtube" && window.YT) {
-      const e = this.player;
-      return Promise.resolve(e.getPlayerState() !== window.YT.PlayerState.PLAYING);
-    } else {
-      if (this.provider === "vimeo")
-        return this.player.getPaused();
-      if (this.provider === "html5") {
-        const e = this.player;
-        return Promise.resolve(e.paused);
-      }
-    }
-    return Promise.resolve(!0);
+    return this.player ? this.isYouTubePlayer(this.player) && window.YT ? Promise.resolve(this.player.getPlayerState() !== window.YT.PlayerState.PLAYING) : this.isVimeoPlayer(this.player) ? this.player.getPaused() : this.isHTML5Player(this.player) ? Promise.resolve(this.player.paused) : Promise.resolve(!0) : Promise.resolve(!0);
   }
   /**
    * Plays the video programmatically.
@@ -170,9 +177,9 @@ const a = class a {
         return;
       }
       this.isPaused().then((t) => {
-        t ? this.provider === "youtube" ? (this.player.playVideo(), this.playEvent(), e()) : this.provider === "vimeo" ? this.player.play().then(() => {
+        t ? this.isYouTubePlayer(this.player) ? (this.player.playVideo(), this.playEvent(), e()) : this.isVimeoPlayer(this.player) ? this.player.play().then(() => {
           this.playEvent(), e();
-        }).catch(i) : this.provider === "html5" && this.player.play().then(() => {
+        }).catch(i) : this.isHTML5Player(this.player) && this.player.play().then(() => {
           this.playEvent(), e();
         }).catch(i) : e();
       }).catch(i);
@@ -188,15 +195,15 @@ const a = class a {
         return;
       }
       this.isPaused().then((t) => {
-        t ? e() : this.provider === "youtube" ? (this.player.pauseVideo(), this.pauseEvent(), e()) : this.provider === "vimeo" ? this.player.pause().then(() => {
+        t ? e() : this.isYouTubePlayer(this.player) ? (this.player.pauseVideo(), this.pauseEvent(), e()) : this.isVimeoPlayer(this.player) ? this.player.pause().then(() => {
           this.pauseEvent(), e();
-        }).catch(i) : this.provider === "html5" && (this.player.pause(), this.pauseEvent(), e());
+        }).catch(i) : this.isHTML5Player(this.player) && (this.player.pause(), this.pauseEvent(), e());
       }).catch(i);
     });
   }
 };
 a.youtubeApiPromise = null, a.vimeoApiPromise = null;
-let o = a;
+let s = a;
 export {
-  o as Video
+  s as Video
 };
