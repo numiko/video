@@ -2,6 +2,7 @@
   "include": ["./src/**/*", "./lib/**/*"],
   "compilerOptions": {
     "target": "ES2021",
+    "lib": ["ES2021", "DOM"],
     "strict": true,
     "composite": true,
     "noEmit": true,
@@ -11,9 +12,6 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "noUncheckedIndexedAccess": true,
-    "skipLibCheck": true, // skips node_modules from the type checking
     "types": ["vitest/globals", "youtube"],
-    // Loads type definitions for all Javascript features standardised in ES2021
-    "lib": ["ES2021", "DOM"]
   }
 }

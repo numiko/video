@@ -103,7 +103,7 @@ export declare type VideoOptions = {
 
 export declare type VideoProvider = 'youtube' | 'vimeo' | 'html5';
 
-declare type YouTubePlayer = {
+export declare type YouTubePlayer = {
     playVideo(): void;
     pauseVideo(): void;
     getPlayerState(): number;
