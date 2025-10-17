@@ -13,5 +13,6 @@
     "moduleResolution": "Bundler",
     "noUncheckedIndexedAccess": true,
     "types": ["vitest/globals", "youtube"],
+    "skipLibCheck": true
   }
 }
