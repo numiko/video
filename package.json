@@ -16,6 +16,7 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
     "generate-docs": "typedoc lib/Video.ts",
+    "deploy-docs": "netlify deploy --dir=docs --alias=v$(node -p \"require('./package.json').version\")",
     "release": "release-it"
   },
   "main": "./dist/Video.umd.js",
@@ -32,6 +33,7 @@
     }
   },
   "devDependencies": {
+    "@j-ulrich/release-it-regex-bumper": "^5.3.0",
     "@stylistic/eslint-plugin": "^2.9.0",
     "@types/node": "^24.7.2",
     "@types/youtube": "^0.1.2",
@@ -40,6 +42,7 @@
     "eslint": "^9.12.0",
     "globals": "^15.11.0",
     "happy-dom": "^15.7.4",
+    "netlify-cli": "^23.9.1",
     "release-it": "^17.10.0",
     "timing-object": "^3.1.94",
     "typedoc": "^0.28.14",
@@ -52,13 +55,25 @@
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "plugins": {
+      "@js-ulrich/release-it-regex-bumper": {
+        "out": [
+          {
+            "file": "README.md",
+            "search": "\\d+-\\d+-\\d+",
+            "replace": "{{major}}-{{minor}}-{{patch}}"
+          }
+        ]
+      }
+    },
     "hooks": {
       "before:init": [
         "vitest run"
       ],
       "after:bump": [
         "npm run generate-docs",
-        "npm run build"
+        "npm run build",
+        "npm run deploy-docs"
       ]
     }
   }
