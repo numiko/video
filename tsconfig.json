@@ -1,0 +1,17 @@
+{
+  "include": ["./src/**/*", "./lib/**/*"],
+  "compilerOptions": {
+    "strict": true,
+    "composite": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "allowJs": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noUncheckedIndexedAccess": true,
+    "types": ["vitest/globals", "youtube"],
+    // Loads type definitions for all Javascript features standardised in ES2021
+    "lib": ["ES2021", "DOM"]
+  }
+}
