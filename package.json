@@ -17,7 +17,7 @@
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
     "generate-docs": "typedoc lib/Video.ts",
     "deploy-docs": "netlify deploy --dir=docs --alias=v$(node -p \"require('./package.json').version\")",
-    "release": "release-it"
+    "release": "echo 'Releasing package. Ensure the module is linked to the Netlify project using `netlify link`.'; release-it release",
   },
   "main": "./dist/Video.umd.js",
   "files": [
