@@ -1,6 +1,8 @@
 {
   "include": ["./src/**/*", "./lib/**/*"],
   "compilerOptions": {
+    "target": "ES2021",
+    "lib": ["ES2021", "DOM"],
     "strict": true,
     "composite": true,
     "noEmit": true,
@@ -11,7 +13,6 @@
     "moduleResolution": "Bundler",
     "noUncheckedIndexedAccess": true,
     "types": ["vitest/globals", "youtube"],
-    // Loads type definitions for all Javascript features standardised in ES2021
-    "lib": ["ES2021", "DOM"]
+    "skipLibCheck": true
   }
 }

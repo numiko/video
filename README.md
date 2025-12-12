@@ -144,14 +144,6 @@ The CSS for the videos is already part of sitekit and included in the component 
 }
 ```
 
-## Constructor options
+## API
 
-|Property|Type|Description|
-|-------|------|--------|
-|`playerElement`|HTMLElement|The HTML element that the video is injected into.|
-|`videoId`|	string	|The video's ID. Required for YouTube and Vimeo providers.|
-|`provider`	| 'youtube', 'vimeo', 'html5'|	The video's provider.|
-|`facade`|HTMLElement (optional)|	Optional HTML element displayed as a facade before the video is initiated.|
-|`onVideoPlay`|	Function (optional)|	Optional callback function for when the video plays.|
-|`onVideoPause`|	Function (optional)|	Optional callback function for when the video pauses.|
-|`onBeforeVideoPlay`|	Function (optional)|	Optional callback function for before the video plays.
+See [documentation](https://v0-1-1--numiko-video.netlify.app/) for more detail on how to use the package.
