@@ -193,11 +193,14 @@ class Video {
         return;
       }
 
+      const isFacadeAutoplay = this.facade && this.autoplay;
+
       this.player = new window.Vimeo.Player(this.playerElement, {
         id: this.videoId,
         transparent: false,
         autopause: true,
-        autoplay: this.autoplay
+        autoplay: isFacadeAutoplay ? false : this.autoplay,
+        ...(isFacadeAutoplay && { playsinline: true })
       });
 
       const vimeoPlayer = this.player;
@@ -211,6 +214,10 @@ class Video {
               this.playEvent();
               resolve();
             }).catch((error: unknown) => {
+              if (isFacadeAutoplay) {
+                resolve();
+                return;
+              }
               console.error('Error playing the video:', error);
               reject(error);
             });
@@ -219,10 +226,18 @@ class Video {
           }
         });
 
-        vimeoPlayer.on('play', this.playEvent.bind(this));
+        vimeoPlayer.on('play', () => {
+          if (this.autoplay && !this.hasAutoplayed) {
+            this.hasAutoplayed = true;
+          }
+          this.playEvent();
+        });
         vimeoPlayer.on('pause', this.pauseEvent.bind(this));
 
         vimeoPlayer.on('error', (error: unknown) => {
+          if (isFacadeAutoplay) {
+            return;
+          }
           console.error('Vimeo player error:', error);
           reject(error);
         });

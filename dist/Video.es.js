@@ -75,22 +75,30 @@ const a = class a {
         i(new Error("Vimeo API not loaded"));
         return;
       }
+      const t = this.facade && this.autoplay;
       this.player = new window.Vimeo.Player(this.playerElement, {
         id: this.videoId,
         transparent: !1,
         autopause: !0,
-        autoplay: this.autoplay
+        autoplay: t ? !1 : this.autoplay,
+        ...t && { playsinline: !0 }
       });
-      const t = this.player;
-      t.ready().then(() => {
-        t.on("loaded", () => {
-          this.hideFacade(), this.autoplay && !this.hasAutoplayed ? (this.hasAutoplayed = !0, t.play().then(() => {
+      const r = this.player;
+      r.ready().then(() => {
+        r.on("loaded", () => {
+          this.hideFacade(), this.autoplay && !this.hasAutoplayed ? (this.hasAutoplayed = !0, r.play().then(() => {
             this.playEvent(), e();
-          }).catch((r) => {
-            console.error("Error playing the video:", r), i(r);
+          }).catch((s) => {
+            if (t) {
+              e();
+              return;
+            }
+            console.error("Error playing the video:", s), i(s);
           })) : e();
-        }), t.on("play", this.playEvent.bind(this)), t.on("pause", this.pauseEvent.bind(this)), t.on("error", (r) => {
-          console.error("Vimeo player error:", r), i(r);
+        }), r.on("play", () => {
+          this.autoplay && !this.hasAutoplayed && (this.hasAutoplayed = !0), this.playEvent();
+        }), r.on("pause", this.pauseEvent.bind(this)), r.on("error", (s) => {
+          t || (console.error("Vimeo player error:", s), i(s));
         });
       }).catch(i);
     });
@@ -203,7 +211,7 @@ const a = class a {
   }
 };
 a.youtubeApiPromise = null, a.vimeoApiPromise = null;
-let s = a;
+let l = a;
 export {
-  s as Video
+  l as Video
 };
