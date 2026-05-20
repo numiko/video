@@ -29,9 +29,6 @@ const isPlaying = {
  */
 videoProviders.forEach(provider => {
   test.describe(`${provider} video`, () => {
-    // Skips YouTube tests in CI because YouTube blocks embedded playback from AWS IPs.
-    test.skip(provider === 'youtube' && !!process.env.CI, 'YouTube blocks embedded playback from AWS IPs');
-
     test(`${provider} facade is hidden when clicked`, async ({ page }) => {
       // Arrange
       await page.goto(`http://localhost:5173/?test=${provider}-facade`);
@@ -49,7 +46,24 @@ videoProviders.forEach(provider => {
       await expect(facade).not.toBeAttached({ timeout: 15000 });
     });
 
+    test(`${provider} player is ready after facade click`, async ({ page }) => {
+      // Arrange
+      await page.goto(`http://localhost:5173/?test=${provider}-facade`);
+      const videoInstance = await page.waitForFunction(getVideoInstance, provider);
+
+      // Act
+      await page.locator(`[data-js-video-provider="${provider}"] [data-js-video-facade]`).click();
+
+      /**
+       * Assert the provider's SDK initialised and attached a player instance.
+       * Doesn't depend on actual playback (which YouTube blocks from CI IPs).
+       */
+      await page.waitForFunction(vi => !!vi.player, videoInstance);
+    });
+
     test(`${provider} video plays when facade is clicked`, async ({ page }) => {
+      test.skip(provider === 'youtube' && !!process.env.CI, 'YouTube blocks embedded playback from AWS IPs');
+
       // Arrange
       await page.goto(`http://localhost:5173/?test=${provider}-facade`);
       const videoInstance = await page.waitForFunction(getVideoInstance, provider);
@@ -69,6 +83,8 @@ videoProviders.forEach(provider => {
     });
 
     test(`${provider} plain video plays when clicked`, async ({ page }) => {
+      test.skip(provider === 'youtube' && !!process.env.CI, 'YouTube blocks embedded playback from AWS IPs');
+
       // Arrange — plain variant has no facade, init() runs immediately on construction
       await page.goto(`http://localhost:5173/?test=${provider}`);
       const videoInstance = await page.waitForFunction(getVideoInstance, provider);
@@ -85,6 +101,8 @@ videoProviders.forEach(provider => {
     });
 
     test(`${provider} ambient video play/pause button toggles the play/pause state when clicked`, async ({ page }) => {
+      test.skip(provider === 'youtube' && !!process.env.CI, 'YouTube blocks embedded playback from AWS IPs');
+
       // Arrange
       await page.goto(`http://localhost:5173/?test=${provider}-ambient`);
       const videoInstance = await page.waitForFunction(getVideoInstance, provider);
