@@ -12,9 +12,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage",
-    "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
     "generate-docs": "typedoc lib/Video.ts",
     "deploy-docs": "netlify deploy --dir=docs --alias=v$(node -p \"require('./package.json').version\")",
     "release": "echo 'Releasing package. Ensure the module is linked to the Netlify project using `netlify link`.'; release-it release"
@@ -37,11 +37,10 @@
     "@stylistic/eslint-plugin": "^2.9.0",
     "@types/node": "^24.9.1",
     "@types/youtube": "^0.1.2",
+    "@playwright/test": "^1.50.1",
     "@vimeo/player": "^2.30.0",
-    "@vitest/coverage-v8": "^2.1.3",
     "eslint": "^9.38.0",
     "globals": "^15.11.0",
-    "happy-dom": "^20.0.11",
     "netlify-cli": "^23.9.5",
     "release-it": "^19.0.5",
     "timing-object": "^3.1.94",
@@ -50,8 +49,7 @@
     "typescript-eslint": "^8.46.2",
     "vite": "^5.2.12",
     "vite-plugin-dts": "^4.5.4",
-    "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^2.1.3"
+    "vite-plugin-eslint": "^1.8.1"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
@@ -75,7 +73,7 @@
     },
     "hooks": {
       "before:init": [
-        "vitest run"
+        "playwright test"
       ],
       "after:bump": [
         "npm run generate-docs",

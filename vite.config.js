@@ -16,12 +16,6 @@ export default defineConfig({
       include: ['src/**', 'lib/**']
     }
   },
-  test: {
-    environment: 'happy-dom',
-    coverage: {
-      include: ['lib/']
-    }
-  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'lib/Video.ts'),
