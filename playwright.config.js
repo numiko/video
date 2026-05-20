@@ -12,6 +12,11 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   // Retry on CI only.
   retries: process.env.CI ? 2 : 0,
+  /**
+   * Single worker on CI — running parallel under CI's CPU/memory caps caused
+   * Vimeo iframe loads to time out. Local dev uses the default (one per CPU).
+   */
+  workers: process.env.CI ? 1 : undefined,
   // Reporters: console list, HTML report, and JUnit XML for CI.
   reporter: [
     ['list'],
