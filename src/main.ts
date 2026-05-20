@@ -76,10 +76,10 @@ function initVideoComponents(): void {
 
   videosWithoutFacade.forEach((video: HTMLElement): void => {
     const playerElement = video.querySelector<HTMLElement>('[data-js-video-player]');
-    const videoId = video.getAttribute('data-js-video-id');
+    const videoId = video.getAttribute('data-js-video-id') || undefined;
     const providerAttr = video.getAttribute('data-js-video-provider');
 
-    if (!playerElement || !videoId || !isVideoProvider(providerAttr)) return;
+    if (!playerElement || !isVideoProvider(providerAttr)) return;
 
     const provider = providerAttr;
 
