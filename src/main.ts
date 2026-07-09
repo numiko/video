@@ -107,11 +107,11 @@ function initVideoComponents(): void {
   const videoAmbients = document.querySelectorAll<HTMLElement>('[data-js-video-ambient]');
 
   videoAmbients.forEach((videoAmbient: HTMLElement): void => {
-    const playPausebutton = videoAmbient.querySelector<HTMLElement>('[data-js-video-button]');
+    const playPauseButton = videoAmbient.querySelector<HTMLElement>('[data-js-video-button]');
     const playerElement = videoAmbient.querySelector<HTMLElement>('[data-js-video-player]');
     const providerAttr = videoAmbient.getAttribute('data-js-video-provider');
 
-    if (!playPausebutton || !playerElement || !isVideoProvider(providerAttr)) return;
+    if (!playPauseButton || !playerElement || !isVideoProvider(providerAttr)) return;
 
     const provider = providerAttr;
 
@@ -120,22 +120,22 @@ function initVideoComponents(): void {
       provider,
       onBeforeVideoPlay: (): void => { },
       onVideoPlay: (): void => {
-        playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
+        playPauseButton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
       },
       onVideoPause: (): void => {
-        playPausebutton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
+        playPauseButton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
       },
     });
     videoAmbient.videoInstance = videoInstance;
 
-    playPausebutton.addEventListener('click', (): void => {
+    playPauseButton.addEventListener('click', (): void => {
       videoInstance.isPaused().then((paused: boolean): void => {
         if (paused) {
           videoInstance.play();
-          playPausebutton.setAttribute('aria-pressed', 'false');
+          playPauseButton.setAttribute('aria-pressed', 'false');
         } else {
           videoInstance.pause();
-          playPausebutton.setAttribute('aria-pressed', 'true');
+          playPauseButton.setAttribute('aria-pressed', 'true');
         }
       });
     });
