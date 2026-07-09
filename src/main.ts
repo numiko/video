@@ -121,9 +121,11 @@ function initVideoComponents(): void {
       onBeforeVideoPlay: (): void => { },
       onVideoPlay: (): void => {
         playPauseButton.querySelector('.c-icon use')?.setAttribute('href', '#material-pause');
+        playPauseButton.setAttribute('aria-pressed', 'false');
       },
       onVideoPause: (): void => {
         playPauseButton.querySelector('.c-icon use')?.setAttribute('href', '#material-play');
+        playPauseButton.setAttribute('aria-pressed', 'true');
       },
     });
     videoAmbient.videoInstance = videoInstance;
@@ -132,10 +134,8 @@ function initVideoComponents(): void {
       videoInstance.isPaused().then((paused: boolean): void => {
         if (paused) {
           videoInstance.play();
-          playPauseButton.setAttribute('aria-pressed', 'false');
         } else {
           videoInstance.pause();
-          playPauseButton.setAttribute('aria-pressed', 'true');
         }
       });
     });

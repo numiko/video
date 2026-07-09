@@ -211,7 +211,6 @@ class Video {
           if (this.autoplay && !this.hasAutoplayed) {
             this.hasAutoplayed = true;
             vimeoPlayer.play().then(() => {
-              this.playEvent();
               resolve();
             }).catch((error: unknown) => {
               if (isFacadeAutoplay) {
@@ -310,7 +309,6 @@ class Video {
     if (this.autoplay && !this.hasAutoplayed) {
       this.player.play().then(() => {
         this.hasAutoplayed = true;
-        this.playEvent();
       }).catch((error: unknown) => {
         console.error('Error playing the video:', error);
       });
@@ -384,16 +382,13 @@ class Video {
         if (paused) {
           if (this.isYouTubePlayer(this.player)) {
             this.player.playVideo();
-            this.playEvent();
             resolve();
           } else if (this.isVimeoPlayer(this.player)) {
             this.player.play().then(() => {
-              this.playEvent();
               resolve();
             }).catch(reject);
           } else if (this.isHTML5Player(this.player)) {
             this.player.play().then(() => {
-              this.playEvent();
               resolve();
             }).catch(reject);
           }
@@ -418,16 +413,13 @@ class Video {
         if (!paused) {
           if (this.isYouTubePlayer(this.player)) {
             this.player.pauseVideo();
-            this.pauseEvent();
             resolve();
           } else if (this.isVimeoPlayer(this.player)) {
             this.player.pause().then(() => {
-              this.pauseEvent();
               resolve();
             }).catch(reject);
           } else if (this.isHTML5Player(this.player)) {
             this.player.pause();
-            this.pauseEvent();
             resolve();
           }
         } else {
