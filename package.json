@@ -16,7 +16,7 @@
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report",
     "generate-docs": "typedoc lib/Video.ts",
-    "deploy-docs": "netlify deploy --dir=docs --alias=v$(node -p \"require('./package.json').version\")",
+    "deploy-docs": "netlify deploy --dir=docs --site=abb62b7d-c4b7-48d5-a9de-2ff0e7a7ea26 --alias=v$(node -p \"require('./package.json').version\") && netlify deploy --dir=docs --site=abb62b7d-c4b7-48d5-a9de-2ff0e7a7ea26 --prod",
     "release": "echo 'Releasing package. Ensure the module is linked to the Netlify project using `netlify link`.'; release-it release"
   },
   "main": "./dist/Video.umd.js",
