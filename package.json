@@ -54,7 +54,7 @@
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
     "plugins": {
-      "@js-ulrich/release-it-regex-bumper": {
+      "@j-ulrich/release-it-regex-bumper": {
         "out": [
           {
             "file": "README.md",
