@@ -1,9 +1,18 @@
+import dts from 'vite-plugin-dts';
 import path from 'path';
 import eslint from 'vite-plugin-eslint';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [eslint()],
+  plugins: [
+    eslint(),
+    dts({
+      tsconfigPath: './tsconfig.dts.json',
+      entryRoot: 'lib',
+      outDir: 'dist',
+      rollupTypes: true
+    })
+  ],
   test: {
     environment: 'happy-dom',
     coverage: {
@@ -12,7 +21,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/Video.js'),
+      entry: path.resolve(import.meta.dirname, 'lib/Video.js'),
       name: 'Video',
       fileName: (format) => `Video.${format}.js`
     },
