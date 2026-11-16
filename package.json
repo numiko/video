@@ -3,7 +3,7 @@
   "description": "Initialise and control videos currently supporting HTML5, YouTube and Vimeo.",
   "version": "0.1.1",
   "type": "module",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org:numiko/video.git"
@@ -12,9 +12,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage",
-    "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "generate-docs": "typedoc lib/Video.ts",
+    "deploy-docs": "netlify deploy --dir=docs --site=abb62b7d-c4b7-48d5-a9de-2ff0e7a7ea26 --alias=v$(node -p \"require('./package.json').version\") && netlify deploy --dir=docs --site=abb62b7d-c4b7-48d5-a9de-2ff0e7a7ea26 --prod",
     "release": "release-it"
   },
   "main": "./dist/Video.umd.js",
@@ -25,27 +27,58 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/Video.d.ts",
       "import": "./dist/Video.es.js",
       "require": "./dist/Video.umd.js"
     }
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "^1.6.0",
-    "eslint": "^8.56.0",
-    "happy-dom": "^7.8.1",
-    "release-it": "^17.10.0",
+    "@j-ulrich/release-it-regex-bumper": "^5.3.0",
+    "@stylistic/eslint-plugin": "^2.9.0",
+    "@types/node": "^24.9.1",
+    "@types/youtube": "^0.1.2",
+    "@playwright/test": "^1.50.1",
+    "@vimeo/player": "^2.30.0",
+    "eslint": "^9.38.0",
+    "globals": "^15.11.0",
+    "netlify-cli": "^23.9.5",
+    "release-it": "^19.0.5",
+    "timing-object": "^3.1.94",
+    "typedoc": "^0.28.14",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.46.2",
     "vite": "^5.2.12",
-    "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^1.6.0"
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-eslint": "^1.8.1"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "plugins": {
+      "@j-ulrich/release-it-regex-bumper": {
+        "out": [
+          {
+            "file": "README.md",
+            "search": "\\d+-\\d+-\\d+",
+            "replace": "{{major}}-{{minor}}-{{patch}}"
+          }
+        ]
+      }
+    },
+    "npm": {
+      "publish": true,
+      "publishArgs": [
+        "--access",
+        "public"
+      ]
+    },
     "hooks": {
       "before:init": [
-        "vitest run"
+        "playwright test"
       ],
       "after:bump": [
-        "npm run build"
+        "npm run generate-docs",
+        "npm run build",
+        "npm run deploy-docs"
       ]
     }
   }

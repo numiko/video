@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist-ssr
 *.local
+docs/
 
 coverage/*
 
@@ -26,3 +27,12 @@ coverage/*
 
 # Ignore test reports
 reports/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Local Netlify folder
+.netlify

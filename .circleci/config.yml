@@ -8,27 +8,23 @@ workflows:
 
 jobs:
   build-and-test:
-    machine:
-      image: ubuntu-2204:2024.01.1
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.50.1-jammy
     resource_class: medium
 
     steps:
       - checkout
       - run:
-          name: Build frontend
-          command: |
-            # Source CircleCI's instance of nvm
-            source /opt/circleci/.nvm/nvm.sh
-
-            nvm install
-            nvm use
-            npm clean-install
-            npm run build
+          name: Install dependencies
+          command: npm clean-install
       - run:
-          name: Run JavaScript tests
-          command: |
-            nvm use
-            npm run test:ci
+          name: Install Chrome (needed for channel:'chrome' in playwright.config.js)
+          command: npx playwright install chrome
+          environment:
+            DEBIAN_FRONTEND: noninteractive
+      - run:
+          name: Run Playwright tests
+          command: npm test
       - store_test_results:
           path: reports/
       - store_artifacts:
