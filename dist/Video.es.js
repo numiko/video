@@ -1,12 +1,24 @@
-// lib/Video.js
+// lib/Video.ts
 var e = class e {
-	static youtubeApiPromise = null;
-	static vimeoApiPromise = null;
-	player = null;
+	static {
+		this.youtubeApiPromise = null;
+	}
+	static {
+		this.vimeoApiPromise = null;
+	}
 	constructor(e) {
-		this.playerElement = e.playerElement, this.videoId = e.videoId, this.provider = e.provider, this.facade = e.facade || null, this.onVideoPlay = e.onVideoPlay || null, this.onVideoPause = e.onVideoPause || null, this.onBeforeVideoPlay = e.onBeforeVideoPlay || null, this.autoplay = e.autoplay || !1, this.hasAutoplayed = !1, this.facade ? this.facade.addEventListener("click", () => {
+		this.player = null, this.playerElement = e.playerElement, this.videoId = e.videoId, this.provider = e.provider, this.facade = e.facade || null, this.onVideoPlay = e.onVideoPlay || null, this.onVideoPause = e.onVideoPause || null, this.onBeforeVideoPlay = e.onBeforeVideoPlay || null, this.autoplay = e.autoplay || !1, this.hasAutoplayed = !1, this.facade ? this.facade.addEventListener("click", () => {
 			this.init();
 		}) : this.init();
+	}
+	isYouTubePlayer(e) {
+		return this.provider === "youtube" && e !== null;
+	}
+	isVimeoPlayer(e) {
+		return this.provider === "vimeo" && e !== null;
+	}
+	isHTML5Player(e) {
+		return this.provider === "html5" && e !== null;
 	}
 	async init() {
 		this.onBeforeVideoPlay && this.onBeforeVideoPlay();
@@ -42,27 +54,37 @@ var e = class e {
 	}
 	createVimeoPlayer() {
 		return new Promise((e, t) => {
+			if (!window.Vimeo) {
+				t(/* @__PURE__ */ Error("Vimeo API not loaded"));
+				return;
+			}
+			let n = this.facade && this.autoplay;
 			this.player = new window.Vimeo.Player(this.playerElement, {
 				id: this.videoId,
 				transparent: !1,
 				autopause: !0,
-				autoplay: +!!this.autoplay
-			}), this.player.ready().then(() => {
-				this.player.on("loaded", () => {
-					this.hideFacade(), this.autoplay && !this.hasAutoplayed ? (this.hasAutoplayed = !0, this.player.play().then(() => {
-						this.playEvent(), e();
-					}).catch((e) => {
-						console.error("Error playing the video:", e), t(e);
+				autoplay: !n && this.autoplay,
+				...n && { playsinline: !0 }
+			});
+			let r = this.player;
+			r.ready().then(() => {
+				r.on("loaded", () => {
+					this.hideFacade(), this.autoplay && !this.hasAutoplayed ? (this.hasAutoplayed = !0, r.play().then(() => {
+						e();
+					}).catch((r) => {
+						n ? e() : (console.error("Error playing the video:", r), t(r));
 					})) : e();
-				}), this.player.on("play", this.playEvent.bind(this)), this.player.on("pause", this.pauseEvent.bind(this)), this.player.on("error", (e) => {
-					console.error("Vimeo player error:", e), t(e);
+				}), r.on("play", () => {
+					this.autoplay && !this.hasAutoplayed && (this.hasAutoplayed = !0), this.playEvent();
+				}), r.on("pause", this.pauseEvent.bind(this)), r.on("error", (e) => {
+					n || (console.error("Vimeo player error:", e), t(e));
 				});
 			}).catch(t);
 		});
 	}
 	createYouTubePlayer() {
 		return new Promise((e, t) => {
-			this.player = new window.YT.Player(this.playerElement, {
+			window.YT ? this.player = new window.YT.Player(this.playerElement, {
 				videoId: this.videoId,
 				width: "1024",
 				height: "576",
@@ -73,55 +95,55 @@ var e = class e {
 				},
 				events: {
 					onReady: () => {
-						this.hideFacade(), this.autoplay && !this.hasAutoplayed && (this.player.playVideo(), this.hasAutoplayed = !0), e();
+						this.hideFacade(), this.autoplay && !this.hasAutoplayed && this.isYouTubePlayer(this.player) && (this.player.playVideo(), this.hasAutoplayed = !0), e();
 					},
 					onStateChange: (e) => {
-						e.data === window.YT.PlayerState.PLAYING && this.playEvent(), e.data === window.YT.PlayerState.PAUSED && this.pauseEvent();
+						window.YT && (e.data === window.YT.PlayerState.PLAYING && this.playEvent(), e.data === window.YT.PlayerState.PAUSED && this.pauseEvent());
 					},
 					onError: (e) => {
 						console.error("YouTube player error:", e), t(e);
 					}
 				}
-			});
+			}) : t(/* @__PURE__ */ Error("YouTube API not loaded"));
 		});
 	}
 	createHTML5Player() {
-		this.player = this.playerElement, this.hideFacade(), this.autoplay && !this.hasAutoplayed && this.player.play().then(() => {
-			this.hasAutoplayed = !0, this.playEvent();
+		this.player = this.playerElement, this.isHTML5Player(this.player) ? (this.hideFacade(), this.autoplay && !this.hasAutoplayed && this.player.play().then(() => {
+			this.hasAutoplayed = !0;
 		}).catch((e) => {
 			console.error("Error playing the video:", e);
 		}), this.player.addEventListener("play", this.playEvent.bind(this)), this.player.addEventListener("pause", this.pauseEvent.bind(this)), this.player.addEventListener("error", (e) => {
 			console.error("HTML5 player error:", e);
-		});
+		})) : console.error("Failed to initialize HTML5 player");
 	}
 	hideFacade() {
 		this.facade && this.facade.remove();
 	}
 	playEvent() {
-		typeof this.onVideoPlay == "function" && this.onVideoPlay(this.player);
+		typeof this.onVideoPlay == "function" && this.player && this.onVideoPlay(this.player);
 	}
 	pauseEvent() {
-		typeof this.onVideoPause == "function" && this.onVideoPause(this.player);
+		typeof this.onVideoPause == "function" && this.player && this.onVideoPause(this.player);
 	}
 	isPaused() {
-		return this.provider === "youtube" ? Promise.resolve(this.player.getPlayerState() !== window.YT.PlayerState.PLAYING) : this.provider === "vimeo" ? this.player.getPaused() : this.provider === "html5" ? Promise.resolve(this.player.paused) : Promise.resolve(!0);
+		return this.player ? this.isYouTubePlayer(this.player) && window.YT ? Promise.resolve(this.player.getPlayerState() !== window.YT.PlayerState.PLAYING) : this.isVimeoPlayer(this.player) ? this.player.getPaused() : this.isHTML5Player(this.player) ? Promise.resolve(this.player.paused) : Promise.resolve(!0) : Promise.resolve(!0);
 	}
 	play() {
 		return new Promise((e, t) => {
-			this.isPaused().then((n) => {
-				n ? this.provider === "youtube" ? (this.player.playVideo(), this.playEvent(), e()) : this.player.play().then(() => {
-					this.playEvent(), e();
+			this.player ? this.isPaused().then((n) => {
+				n ? this.isYouTubePlayer(this.player) ? (this.player.playVideo(), e()) : (this.isVimeoPlayer(this.player) || this.isHTML5Player(this.player)) && this.player.play().then(() => {
+					e();
 				}).catch(t) : e();
-			}).catch(t);
+			}).catch(t) : t(/* @__PURE__ */ Error("Player not initialized"));
 		});
 	}
 	pause() {
 		return new Promise((e, t) => {
-			this.isPaused().then((n) => {
-				n ? e() : this.provider === "youtube" ? (this.player.pauseVideo(), this.pauseEvent(), e()) : this.provider === "vimeo" ? this.player.pause().then(() => {
-					this.pauseEvent(), e();
-				}).catch(t) : this.provider === "html5" && (this.player.pause(), this.pauseEvent(), e());
-			}).catch(t);
+			this.player ? this.isPaused().then((n) => {
+				n ? e() : this.isYouTubePlayer(this.player) ? (this.player.pauseVideo(), e()) : this.isVimeoPlayer(this.player) ? this.player.pause().then(() => {
+					e();
+				}).catch(t) : this.isHTML5Player(this.player) && (this.player.pause(), e());
+			}).catch(t) : t(/* @__PURE__ */ Error("Player not initialized"));
 		});
 	}
 };

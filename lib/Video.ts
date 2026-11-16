@@ -1,35 +1,73 @@
-export class Video {
+// YouTube types are provided globally via tsconfig "types": ["youtube"]
+// This is necessary because the YouTube type definitions are not accessible as a module import;
+// instead, they're injected globally by the TypeScript configuration.
+import type VimeoPlayer from '@vimeo/player';
+
+// Extend Window interface for API checks
+declare global {
+  interface Window {
+    YT?: typeof YT;
+    Vimeo?: {
+      Player: typeof VimeoPlayer;
+    };
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
+// Video provider types
+type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+
+// Local type for YouTube player to avoid exposing YT namespace in public API
+type YouTubePlayer = {
+  playVideo(): void;
+  pauseVideo(): void;
+  getPlayerState(): number;
+};
+
+
+type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
+
+type VideoOptions = {
+  playerElement: HTMLElement;
+  videoId?: string;
+  provider: VideoProvider;
+  facade?: HTMLElement | null;
+  onVideoPlay?: ((player: PlayerInstance) => void) | null;
+  onVideoPause?: ((player: PlayerInstance) => void) | null;
+  onBeforeVideoPlay?: (() => void) | null;
+  autoplay?: boolean;
+};
+
+class Video {
   /**
    * Static property to track YouTube API loading Promise.
-   * @type {Promise<void> | null}
    */
-  static youtubeApiPromise = null;
+  static youtubeApiPromise: Promise<void> | null = null;
 
   /**
    * Static property to track Vimeo API loading Promise.
-   * @type {Promise<void> | null}
    */
-  static vimeoApiPromise = null;
+  static vimeoApiPromise: Promise<void> | null = null;
 
   /**
    * Stores an instance of the video player, once initialized.
-   * @type {YT.Player | Vimeo.Player | HTMLVideoElement | null}
    */
-  player = null;
+  player: PlayerInstance | null = null;
+
+  private playerElement: HTMLElement;
+  private videoId?: string;
+  private provider: VideoProvider;
+  private facade: HTMLElement | null;
+  private onVideoPlay: ((player: PlayerInstance) => void) | null;
+  private onVideoPause: ((player: PlayerInstance) => void) | null;
+  private onBeforeVideoPlay: (() => void) | null;
+  private autoplay: boolean;
+  private hasAutoplayed: boolean;
 
   /**
    * Constructs a new instance of Video.
-   * @param {Object} options - Options for initializing the video embed.
-   * @param {HTMLElement} options.playerElement - The HTML element that the video is injected into.
-   * @param {string} options.videoId - The video's ID.
-   * @param {'youtube' | 'vimeo' | 'html5'} options.provider - The video's provider.
-   * @param {HTMLElement} [options.facade] - Optional HTML element that is displayed as a facade before the video is initiated.
-   * @param {Function} [options.onVideoPlay] - Optional callback function for when the video plays.
-   * @param {Function} [options.onVideoPause] - Optional callback function for when the video pauses.
-   * @param {Function} [options.onBeforeVideoPlay] - Optional callback function for before the video plays.
-   * @param {boolean} [options.autoplay] - Optional flag to enable autoplay.
    */
-  constructor(options) {
+  constructor(options: VideoOptions) {
     this.playerElement = options.playerElement;
     this.videoId = options.videoId;
     this.provider = options.provider;
@@ -50,10 +88,30 @@ export class Video {
   }
 
   /**
-   * Initializes the video player.
-   * @returns {Promise<void>}
+   * Type predicate to check if the player is a YouTube player.
    */
-  async init() {
+  private isYouTubePlayer(player: PlayerInstance | null): player is YT.Player {
+    return this.provider === 'youtube' && player !== null;
+  }
+
+  /**
+   * Type predicate to check if the player is a Vimeo player.
+   */
+  private isVimeoPlayer(player: PlayerInstance | null): player is VimeoPlayer {
+    return this.provider === 'vimeo' && player !== null;
+  }
+
+  /**
+   * Type predicate to check if the player is an HTML5 video element.
+   */
+  private isHTML5Player(player: PlayerInstance | null): player is HTMLVideoElement {
+    return this.provider === 'html5' && player !== null;
+  }
+
+  /**
+   * Initializes the video player.
+   */
+  async init(): Promise<void> {
     if (this.onBeforeVideoPlay) {
       this.onBeforeVideoPlay();
     }
@@ -75,9 +133,8 @@ export class Video {
 
   /**
    * Loads the YouTube API if it hasn't already been loaded.
-   * @returns {Promise<void>}
    */
-  async loadYouTubeApi() {
+  async loadYouTubeApi(): Promise<void> {
     if (Video.youtubeApiPromise) {
       return Video.youtubeApiPromise;
     }
@@ -102,9 +159,8 @@ export class Video {
 
   /**
    * Loads the Vimeo API if it hasn't already been loaded.
-   * @returns {Promise<void>}
    */
-  async loadVimeoApi() {
+  async loadVimeoApi(): Promise<void> {
     if (Video.vimeoApiPromise) {
       return Video.vimeoApiPromise;
     }
@@ -129,26 +185,38 @@ export class Video {
 
   /**
    * Creates the Vimeo player instance.
-   * @returns {Promise<void>}
    */
-  createVimeoPlayer() {
+  createVimeoPlayer(): Promise<void> {
     return new Promise((resolve, reject) => {
+      if (!window.Vimeo) {
+        reject(new Error('Vimeo API not loaded'));
+        return;
+      }
+
+      const isFacadeAutoplay = this.facade && this.autoplay;
+
       this.player = new window.Vimeo.Player(this.playerElement, {
         id: this.videoId,
         transparent: false,
         autopause: true,
-        autoplay: this.autoplay ? 1 : 0
+        autoplay: isFacadeAutoplay ? false : this.autoplay,
+        ...(isFacadeAutoplay && { playsinline: true })
       });
 
-      this.player.ready().then(() => {
-        this.player.on('loaded', () => {
+      const vimeoPlayer = this.player;
+
+      vimeoPlayer.ready().then(() => {
+        vimeoPlayer.on('loaded', () => {
           this.hideFacade();
           if (this.autoplay && !this.hasAutoplayed) {
             this.hasAutoplayed = true;
-            this.player.play().then(() => {
-              this.playEvent();
+            vimeoPlayer.play().then(() => {
               resolve();
-            }).catch((error) => {
+            }).catch((error: unknown) => {
+              if (isFacadeAutoplay) {
+                resolve();
+                return;
+              }
               console.error('Error playing the video:', error);
               reject(error);
             });
@@ -157,10 +225,18 @@ export class Video {
           }
         });
 
-        this.player.on('play', this.playEvent.bind(this));
-        this.player.on('pause', this.pauseEvent.bind(this));
+        vimeoPlayer.on('play', () => {
+          if (this.autoplay && !this.hasAutoplayed) {
+            this.hasAutoplayed = true;
+          }
+          this.playEvent();
+        });
+        vimeoPlayer.on('pause', this.pauseEvent.bind(this));
 
-        this.player.on('error', (error) => {
+        vimeoPlayer.on('error', (error: unknown) => {
+          if (isFacadeAutoplay) {
+            return;
+          }
           console.error('Vimeo player error:', error);
           reject(error);
         });
@@ -170,10 +246,14 @@ export class Video {
 
   /**
    * Creates the YouTube player instance.
-   * @returns {Promise<void>}
    */
-  createYouTubePlayer() {
+  createYouTubePlayer(): Promise<void> {
     return new Promise((resolve, reject) => {
+      if (!window.YT) {
+        reject(new Error('YouTube API not loaded'));
+        return;
+      }
+
       this.player = new window.YT.Player(this.playerElement, {
         videoId: this.videoId,
         width: '1024',
@@ -187,12 +267,15 @@ export class Video {
           onReady: () => {
             this.hideFacade();
             if (this.autoplay && !this.hasAutoplayed) {
-              this.player.playVideo();
-              this.hasAutoplayed = true;
+              if (this.isYouTubePlayer(this.player)) {
+                this.player.playVideo();
+                this.hasAutoplayed = true;
+              }
             }
             resolve();
           },
-          onStateChange: (event) => {
+          onStateChange: (event: { data: number }) => {
+            if (!window.YT) return;
             if (event.data === window.YT.PlayerState.PLAYING) {
               this.playEvent();
             }
@@ -200,7 +283,7 @@ export class Video {
               this.pauseEvent();
             }
           },
-          onError: (error) => {
+          onError: (error: unknown) => {
             console.error('YouTube player error:', error);
             reject(error);
           },
@@ -211,18 +294,22 @@ export class Video {
 
   /**
    * Creates the HTML5 video player instance.
-   * @returns {void}
    */
-  createHTML5Player() {
-    this.player = this.playerElement;
+  createHTML5Player(): void {
+    this.player = this.playerElement as HTMLVideoElement;
+
+    // checks for HTMLVideoElement type already
+    if (!this.isHTML5Player(this.player)) {
+      console.error('Failed to initialize HTML5 player');
+      return;
+    }
 
     this.hideFacade();
 
     if (this.autoplay && !this.hasAutoplayed) {
       this.player.play().then(() => {
         this.hasAutoplayed = true;
-        this.playEvent();
-      }).catch((error) => {
+      }).catch((error: unknown) => {
         console.error('Error playing the video:', error);
       });
     }
@@ -230,16 +317,15 @@ export class Video {
     this.player.addEventListener('play', this.playEvent.bind(this));
     this.player.addEventListener('pause', this.pauseEvent.bind(this));
 
-    this.player.addEventListener('error', (error) => {
+    this.player.addEventListener('error', (error: Event) => {
       console.error('HTML5 player error:', error);
     });
   }
 
   /**
    * Hides the facade element.
-   * @returns {void}
    */
-  hideFacade() {
+  hideFacade(): void {
     if (this.facade) {
       this.facade.remove();
     }
@@ -247,20 +333,18 @@ export class Video {
 
   /**
    * Event to fire when video is playing
-   * @returns {void}
    */
-  playEvent() {
-    if (typeof this.onVideoPlay === 'function') {
+  playEvent(): void {
+    if (typeof this.onVideoPlay === 'function' && this.player) {
       this.onVideoPlay(this.player);
     }
   }
 
   /**
    * Event to fire when video is paused
-   * @returns {void}
    */
-  pauseEvent() {
-    if (typeof this.onVideoPause === 'function') {
+  pauseEvent(): void {
+    if (typeof this.onVideoPause === 'function' && this.player) {
       this.onVideoPause(this.player);
     }
   }
@@ -268,14 +352,17 @@ export class Video {
 
   /**
    * Helper function to determine if the player is paused.
-   * @returns {Promise<boolean>} - Resolves to true if paused, false if playing.
    */
-  isPaused() {
-    if (this.provider === 'youtube') {
+  isPaused(): Promise<boolean> {
+    if (!this.player) {
+      return Promise.resolve(true);
+    }
+
+    if (this.isYouTubePlayer(this.player) && window.YT) {
       return Promise.resolve(this.player.getPlayerState() !== window.YT.PlayerState.PLAYING);
-    } else if (this.provider === 'vimeo') {
+    } else if (this.isVimeoPlayer(this.player)) {
       return this.player.getPaused();
-    } else if (this.provider === 'html5') {
+    } else if (this.isHTML5Player(this.player)) {
       return Promise.resolve(this.player.paused);
     }
     return Promise.resolve(true);
@@ -283,19 +370,25 @@ export class Video {
 
   /**
    * Plays the video programmatically.
-   * @returns {Promise<void>}
    */
-  play() {
+  play(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.isPaused().then((paused) => {
+      if (!this.player) {
+        reject(new Error('Player not initialized'));
+        return;
+      }
+
+      this.isPaused().then((paused: boolean) => {
         if (paused) {
-          if (this.provider === 'youtube') {
+          if (this.isYouTubePlayer(this.player)) {
             this.player.playVideo();
-            this.playEvent();
             resolve();
-          } else {
+          } else if (this.isVimeoPlayer(this.player)) {
             this.player.play().then(() => {
-              this.playEvent();
+              resolve();
+            }).catch(reject);
+          } else if (this.isHTML5Player(this.player)) {
+            this.player.play().then(() => {
               resolve();
             }).catch(reject);
           }
@@ -308,24 +401,25 @@ export class Video {
 
   /**
    * Pauses the video programmatically.
-   * @returns {Promise<void>}
    */
-  pause() {
+  pause(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.isPaused().then((paused) => {
+      if (!this.player) {
+        reject(new Error('Player not initialized'));
+        return;
+      }
+
+      this.isPaused().then((paused: boolean) => {
         if (!paused) {
-          if (this.provider === 'youtube') {
+          if (this.isYouTubePlayer(this.player)) {
             this.player.pauseVideo();
-            this.pauseEvent();
             resolve();
-          } else if (this.provider === 'vimeo') {
+          } else if (this.isVimeoPlayer(this.player)) {
             this.player.pause().then(() => {
-              this.pauseEvent();
               resolve();
             }).catch(reject);
-          } else if (this.provider === 'html5') {
+          } else if (this.isHTML5Player(this.player)) {
             this.player.pause();
-            this.pauseEvent();
             resolve();
           }
         } else {
@@ -335,3 +429,11 @@ export class Video {
     });
   }
 }
+
+export {
+  Video,
+  type VideoProvider,
+  type VideoOptions,
+  type PlayerInstance,
+  type YouTubePlayer,
+};

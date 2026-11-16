@@ -13,15 +13,14 @@ export default defineConfig({
       rollupTypes: true
     })
   ],
-  test: {
-    environment: 'happy-dom',
-    coverage: {
-      include: ['lib/']
+  server: {
+    watch: {
+      include: ['src/**', 'lib/**']
     }
   },
   build: {
     lib: {
-      entry: path.resolve(import.meta.dirname, 'lib/Video.js'),
+      entry: path.resolve(import.meta.dirname, 'lib/Video.ts'),
       name: 'Video',
       fileName: (format) => `Video.${format}.js`
     },

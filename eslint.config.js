@@ -18,6 +18,8 @@ export default [
       globals: {
         ...globals.node,
         ...globals.browser,
+        // tells ESLint that a global named YT exists at runtime and must not be flagged as undefined
+        YT: 'readonly',
       },
     },
     plugins: {
@@ -43,6 +45,12 @@ export default [
     files: ['**/*.ts'],
     rules: {
       'no-undef': 'off',
+    }
+  },
+  {
+    files: ['src/main.ts'],
+    rules: {
+      'no-console': 'off',
     }
   }
 ];

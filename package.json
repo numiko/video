@@ -1,23 +1,25 @@
 {
   "name": "@numiko/video",
   "description": "Initialise and control videos currently supporting HTML5, YouTube and Vimeo.",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "type": "module",
   "engines": {
     "node": ">=26.12.1"
   },
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org:numiko/video.git"
+    "url": "git+ssh://git@ssh.bitbucket.org:numiko/video.git"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:coverage": "vitest --coverage",
-    "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "generate-docs": "typedoc lib/Video.ts",
+    "deploy-docs": "netlify deploy --dir=docs --site=abb62b7d-c4b7-48d5-a9de-2ff0e7a7ea26 --alias=v$(node -p \"require('./package.json').version\") && netlify deploy --dir=docs --site=abb62b7d-c4b7-48d5-a9de-2ff0e7a7ea26 --prod",
     "release": "release-it"
   },
   "main": "./dist/Video.umd.js",
@@ -34,29 +36,52 @@
     }
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
+    "@j-ulrich/release-it-regex-bumper": "^5.3.0",
+    "@playwright/test": "^1.50.1",
     "@stylistic/eslint-plugin": "^5.6.1",
     "@types/node": "^26.2.0",
-    "@vitest/coverage-v8": "^5.0.5",
+    "@types/youtube": "^0.1.2",
+    "@vimeo/player": "^2.30.0",
     "eslint": "^9.39.5",
     "globals": "^17.10.0",
-    "happy-dom": "^21.0.4",
+    "netlify-cli": "^23.9.5",
     "release-it": "^21.0.2",
+    "timing-object": "^3.1.94",
+    "typedoc": "^0.28.14",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.2.1",
     "vite-plugin-dts": "^5.1.2",
-    "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^5.0.5"
+    "vite-plugin-eslint": "^1.8.1"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "plugins": {
+      "@j-ulrich/release-it-regex-bumper": {
+        "out": [
+          {
+            "file": "README.md",
+            "search": "\\d+-\\d+-\\d+",
+            "replace": "{{major}}-{{minor}}-{{patch}}"
+          }
+        ]
+      }
+    },
+    "npm": {
+      "publish": true,
+      "publishArgs": [
+        "--access",
+        "public"
+      ]
+    },
     "hooks": {
       "before:init": [
-        "vitest run"
+        "playwright test"
       ],
       "after:bump": [
-        "npm run build"
+        "npm run generate-docs",
+        "npm run build",
+        "npm run deploy-docs"
       ]
     }
   }
