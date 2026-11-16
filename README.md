@@ -147,3 +147,19 @@ The CSS for the videos is already part of sitekit and included in the component 
 ## API
 
 See [documentation](https://v0-1-1--numiko-video.netlify.app/) for more detail on how to use the package.
+
+## Tests
+
+End-to-end tests run via [Playwright](https://playwright.dev) against the Vite dev server (started automatically).
+
+```shell
+npm test            # run the suite headless
+npm run test:ui     # open Playwright's UI runner
+npm run test:report # open the last HTML report
+```
+
+**YouTube playback tests are skipped in CI.** YouTube blocks embedded playback from AWS IP ranges (where CircleCI runs), returning an auth error before the player can start. These three YouTube tests are skipped in CI and should be tested locally:
+
+- `video plays when facade is clicked`
+- `plain video plays when clicked`
+- `ambient video play/pause button toggles the play/pause state when clicked`

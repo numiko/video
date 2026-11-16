@@ -45,5 +45,11 @@ export default [
     rules: {
       'no-undef': 'off',
     }
+  },
+  {
+    files: ['src/main.ts'],
+    rules: {
+      'no-console': 'off',
+    }
   }
 ];
