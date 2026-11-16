@@ -87,7 +87,7 @@ const a = class a {
       r.ready().then(() => {
         r.on("loaded", () => {
           this.hideFacade(), this.autoplay && !this.hasAutoplayed ? (this.hasAutoplayed = !0, r.play().then(() => {
-            this.playEvent(), e();
+            e();
           }).catch((s) => {
             if (t) {
               e();
@@ -144,7 +144,7 @@ const a = class a {
       return;
     }
     this.hideFacade(), this.autoplay && !this.hasAutoplayed && this.player.play().then(() => {
-      this.hasAutoplayed = !0, this.playEvent();
+      this.hasAutoplayed = !0;
     }).catch((e) => {
       console.error("Error playing the video:", e);
     }), this.player.addEventListener("play", this.playEvent.bind(this)), this.player.addEventListener("pause", this.pauseEvent.bind(this)), this.player.addEventListener("error", (e) => {
@@ -185,10 +185,10 @@ const a = class a {
         return;
       }
       this.isPaused().then((t) => {
-        t ? this.isYouTubePlayer(this.player) ? (this.player.playVideo(), this.playEvent(), e()) : this.isVimeoPlayer(this.player) ? this.player.play().then(() => {
-          this.playEvent(), e();
+        t ? this.isYouTubePlayer(this.player) ? (this.player.playVideo(), e()) : this.isVimeoPlayer(this.player) ? this.player.play().then(() => {
+          e();
         }).catch(i) : this.isHTML5Player(this.player) && this.player.play().then(() => {
-          this.playEvent(), e();
+          e();
         }).catch(i) : e();
       }).catch(i);
     });
@@ -203,15 +203,15 @@ const a = class a {
         return;
       }
       this.isPaused().then((t) => {
-        t ? e() : this.isYouTubePlayer(this.player) ? (this.player.pauseVideo(), this.pauseEvent(), e()) : this.isVimeoPlayer(this.player) ? this.player.pause().then(() => {
-          this.pauseEvent(), e();
-        }).catch(i) : this.isHTML5Player(this.player) && (this.player.pause(), this.pauseEvent(), e());
+        t ? e() : this.isYouTubePlayer(this.player) ? (this.player.pauseVideo(), e()) : this.isVimeoPlayer(this.player) ? this.player.pause().then(() => {
+          e();
+        }).catch(i) : this.isHTML5Player(this.player) && (this.player.pause(), e());
       }).catch(i);
     });
   }
 };
 a.youtubeApiPromise = null, a.vimeoApiPromise = null;
-let l = a;
+let o = a;
 export {
-  l as Video
+  o as Video
 };
