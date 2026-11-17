@@ -7,9 +7,11 @@ export default defineConfig({
   plugins: [
     eslint(),
     dts({
+      tsconfigPath: './tsconfig.dts.json',
+      entryRoot: 'lib',
       outDir: 'dist',
       rollupTypes: true
-    }),
+    })
   ],
   server: {
     watch: {
@@ -18,7 +20,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/Video.ts'),
+      entry: path.resolve(import.meta.dirname, 'lib/Video.ts'),
       name: 'Video',
       fileName: (format) => `Video.${format}.js`
     },

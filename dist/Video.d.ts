@@ -1,8 +1,31 @@
-import { default as default_2 } from '@vimeo/player';
-
-export declare type PlayerInstance = YouTubePlayer | default_2 | HTMLVideoElement;
-
-export declare class Video {
+import { default as VimeoPlayer } from '@vimeo/player';
+declare global {
+    interface Window {
+        YT?: typeof YT;
+        Vimeo?: {
+            Player: typeof VimeoPlayer;
+        };
+        onYouTubeIframeAPIReady?: () => void;
+    }
+}
+type VideoProvider = 'youtube' | 'vimeo' | 'html5';
+type YouTubePlayer = {
+    playVideo(): void;
+    pauseVideo(): void;
+    getPlayerState(): number;
+};
+type PlayerInstance = YouTubePlayer | VimeoPlayer | HTMLVideoElement;
+type VideoOptions = {
+    playerElement: HTMLElement;
+    videoId?: string;
+    provider: VideoProvider;
+    facade?: HTMLElement | null;
+    onVideoPlay?: ((player: PlayerInstance) => void) | null;
+    onVideoPause?: ((player: PlayerInstance) => void) | null;
+    onBeforeVideoPlay?: (() => void) | null;
+    autoplay?: boolean;
+};
+declare class Video {
     /**
      * Static property to track YouTube API loading Promise.
      */
@@ -89,24 +112,4 @@ export declare class Video {
      */
     pause(): Promise<void>;
 }
-
-export declare type VideoOptions = {
-    playerElement: HTMLElement;
-    videoId?: string;
-    provider: VideoProvider;
-    facade?: HTMLElement | null;
-    onVideoPlay?: ((player: PlayerInstance) => void) | null;
-    onVideoPause?: ((player: PlayerInstance) => void) | null;
-    onBeforeVideoPlay?: (() => void) | null;
-    autoplay?: boolean;
-};
-
-export declare type VideoProvider = 'youtube' | 'vimeo' | 'html5';
-
-export declare type YouTubePlayer = {
-    playVideo(): void;
-    pauseVideo(): void;
-    getPlayerState(): number;
-};
-
-export { }
+export { Video, type VideoProvider, type VideoOptions, type PlayerInstance, type YouTubePlayer, };

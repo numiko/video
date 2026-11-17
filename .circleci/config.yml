@@ -9,7 +9,7 @@ workflows:
 jobs:
   build-and-test:
     docker:
-      - image: mcr.microsoft.com/playwright:v1.50.1-jammy
+      - image: mcr.microsoft.com/playwright:v1.65.0-noble
     resource_class: medium
 
     steps:
