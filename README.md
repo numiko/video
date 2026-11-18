@@ -3,13 +3,9 @@
 `Video` is a JavaScript class for embedding and controlling video players from YouTube, Vimeo, and HTML5 video sources. It provides a consistent interface for initializing video players, handling play/pause functionality, and managing event callbacks.
 
 ## Installation
-a) Install a specific tag
+
 ```shell
-npm install ssh://git@bitbucket.org:numiko/video.git#<TAG_NAME>
-```
-b) Install using semver
-```shell
-npm install ssh://git@bitbucket.org:numiko/video.git##semver:^1.0.0
+npm install @numiko/video
 ```
 
 ## Usage
