@@ -142,7 +142,7 @@ The CSS for the videos is already part of sitekit and included in the component 
 
 ## API
 
-See [documentation](https://v1-0-1--numiko-video.netlify.app/) for more detail on how to use the package.
+See [documentation](https://v1-0-2--numiko-video.netlify.app/) for more detail on how to use the package.
 
 ## Tests
 
