@@ -53,7 +53,7 @@
     "release-it": "^21.0.2",
     "timing-object": "^3.1.94",
     "typedoc": "^0.28.14",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.72.1",
     "vite": "^8.3.7",
     "vite-plugin-dts": "^5.1.2",
