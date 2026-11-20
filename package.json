@@ -47,7 +47,7 @@
     "@types/node": "^26.6.6",
     "@types/youtube": "^0.1.2",
     "@vimeo/player": "^2.30.4",
-    "eslint": "^9.39.5",
+    "eslint": "^10.14.0",
     "globals": "^17.10.0",
     "netlify-cli": "^27.16.3",
     "release-it": "^21.0.2",
