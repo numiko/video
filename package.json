@@ -45,7 +45,7 @@
     "@playwright/test": "^1.65.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^26.6.6",
-    "@types/youtube": "^0.1.2",
+    "@types/youtube": "^0.3.0",
     "@vimeo/player": "^2.30.4",
     "eslint": "^9.39.5",
     "globals": "^17.10.0",
